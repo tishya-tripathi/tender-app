@@ -26,22 +26,12 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import Stack from "@mui/material/Stack";
 import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-const AdminUploadTender = () => {
+const VendorUploadTender = () => {
   const theme = useTheme();
-
-  const [startDate, setStartDate] = React.useState(new Date());
-  const handleStartDateChange = (newValue) => {
-    setStartDate(newValue);
-  };
-  const [endDate, setEndDate] = React.useState(new Date());
-  const handleEndDateChange = (newValue) => {
-    setEndDate(newValue);
-  };
 
   return (
     <>
@@ -87,7 +77,7 @@ const AdminUploadTender = () => {
                   p: 2,
                   display: "flex",
                   flexDirection: "column",
-                  height: 170,
+                  height: 150,
                   backgroundColor: "#D4F1F4",
                 }}
               >
@@ -97,20 +87,13 @@ const AdminUploadTender = () => {
                   columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   <Grid item xs={11}>
-                    {/* <Typography
+                    <Typography
                       variant="h5"
                       color="text.primary"
-                      sx={{ ml: 3, mt: 1, fontWeight: "bold"  }}
+                      sx={{ ml: 3, mt: 1, fontWeight: "bold" }}
                     >
-                      Tender 
-                    </Typography> */}
-                    <TextField
-                      sx={{ ml: "2rem", width: "30vw" }}
-                      name="tendername"
-                      variant="outlined"
-                      defaultValue={"Tender Name : Lorem Ipsum Dolor Sit Amet"}
-                    />
-                    <br></br>
+                      Tender Name : Lorem Ipsum Dolor Sit Amet
+                    </Typography>
                     <br></br>
                     <br></br>
                     <Stack
@@ -119,37 +102,28 @@ const AdminUploadTender = () => {
                       justifyContent="space-evenly"
                     >
                       <Button
-                        component="label"
-                        startIcon={<UploadFileRoundedIcon />}
+                        startIcon={<DownloadRoundedIcon />}
                         variant="contained"
-                        sx={{ width: "10vw" }}
+                        sx={{ width: "15vw" }}
                       >
-                        File
+                        Download File
+                      </Button>
+
+                      <Button
+                        component="label"
+                        startIcon={<FileUploadRoundedIcon />}
+                        variant="contained"
+                        sx={{ width: "15vw" }}
+                      >
+                        Upload File
                         <input type="file" hidden />
                       </Button>
 
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DesktopDatePicker
-                          label="Start Date"
-                          minDate={new Date()}
-                          value={startDate}
-                          onChange={handleStartDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
-
-                      <LocalizationProvider
-                        dateAdapter={AdapterDateFns}
-                        sx={{}}
-                      >
-                        <DesktopDatePicker
-                          label="End Date"
-                          minDate={new Date()}
-                          value={endDate}
-                          onChange={handleEndDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
+                      <TextField
+                        name="tenderValue"
+                        label="Tender Value"
+                        type="tel"
+                      />
 
                       <Button
                         startIcon={<CheckBoxRoundedIcon />}
@@ -160,7 +134,6 @@ const AdminUploadTender = () => {
                         Save
                       </Button>
                     </Stack>
-                    <br></br>
                     <br></br>
                   </Grid>
                   <Grid item xs={1}>
@@ -178,7 +151,7 @@ const AdminUploadTender = () => {
                   p: 2,
                   display: "flex",
                   flexDirection: "column",
-                  height: 170,
+                  height: 150,
                   backgroundColor: "#D4F1F4",
                 }}
               >
@@ -188,20 +161,13 @@ const AdminUploadTender = () => {
                   columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   <Grid item xs={11}>
-                    {/* <Typography
+                    <Typography
                       variant="h5"
                       color="text.primary"
-                      sx={{ ml: 3, mt: 1, fontWeight: "bold"  }}
+                      sx={{ ml: 3, mt: 1, fontWeight: "bold" }}
                     >
-                      Tender 
-                    </Typography> */}
-                    <TextField
-                      sx={{ ml: "2rem", width: "30vw" }}
-                      name="tendername"
-                      variant="outlined"
-                      defaultValue={"Tender Name : Lorem Ipsum Dolor Sit Amet"}
-                    />
-                    <br></br>
+                      Tender Name : Lorem Ipsum Dolor Sit Amet
+                    </Typography>
                     <br></br>
                     <br></br>
                     <Stack
@@ -210,37 +176,28 @@ const AdminUploadTender = () => {
                       justifyContent="space-evenly"
                     >
                       <Button
-                        component="label"
-                        startIcon={<UploadFileRoundedIcon />}
+                        startIcon={<DownloadRoundedIcon />}
                         variant="contained"
-                        sx={{ width: "10vw" }}
+                        sx={{ width: "15vw" }}
                       >
-                        File
+                        Download File
+                      </Button>
+
+                      <Button
+                        component="label"
+                        startIcon={<FileUploadRoundedIcon />}
+                        variant="contained"
+                        sx={{ width: "15vw" }}
+                      >
+                        Upload File
                         <input type="file" hidden />
                       </Button>
 
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DesktopDatePicker
-                          label="Start Date"
-                          minDate={new Date()}
-                          value={startDate}
-                          onChange={handleStartDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
-
-                      <LocalizationProvider
-                        dateAdapter={AdapterDateFns}
-                        sx={{}}
-                      >
-                        <DesktopDatePicker
-                          label="End Date"
-                          minDate={new Date()}
-                          value={endDate}
-                          onChange={handleEndDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
+                      <TextField
+                        name="tenderValue"
+                        label="Tender Value"
+                        type="tel"
+                      />
 
                       <Button
                         startIcon={<CheckBoxRoundedIcon />}
@@ -251,7 +208,6 @@ const AdminUploadTender = () => {
                         Save
                       </Button>
                     </Stack>
-                    <br></br>
                     <br></br>
                   </Grid>
                   <Grid item xs={1}>
@@ -269,4 +225,4 @@ const AdminUploadTender = () => {
   );
 };
 
-export default AdminUploadTender;
+export default VendorUploadTender;

@@ -20,6 +20,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 
 const AdminHome = () => {
   const theme = useTheme();
@@ -27,7 +29,7 @@ const AdminHome = () => {
   return (
     <>
       <Box>
-        {/* Navbar of Home Page */}
+        {/* Navbar */}
         <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
           <AppBar position="static" elevation={0}>
             <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
@@ -43,6 +45,9 @@ const AdminHome = () => {
               >
                 Tender Management Portal
               </Typography>
+              <IconButton edge="start" color="warning" aria-label="Logout">
+                <LoginIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
         </Box>

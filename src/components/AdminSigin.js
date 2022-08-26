@@ -93,6 +93,7 @@ const AdminSignin = () => {
               autoComplete="current-password"
             />
             <Button
+              href="home"
               type="submit"
               fullWidth
               variant="contained"

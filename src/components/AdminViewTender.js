@@ -27,37 +27,38 @@ import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import Stack from "@mui/material/Stack";
 import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const AdminViewTender = () => {
   const theme = useTheme();
   const rows = [
     {
       id: 1,
-      vendorName: "Feastables",
-      orgName: "Mr.Beast",
+      vendorName: "Vendor 1",
+      orgName: "Organization 1",
       phone: 9989998975,
       tenderValue: 1500000,
     },
     {
       id: 2,
-      vendorName: "Feastables",
-      orgName: "Mr.Beast",
+      vendorName: "Vendor 2 ",
+      orgName: "Organization 2",
       phone: 9989998975,
-      tenderValue: 1500000,
+      tenderValue: 750000,
     },
     {
       id: 3,
-      vendorName: "Feastables",
-      orgName: "Mr.Beast",
+      vendorName: "Vendor 3",
+      orgName: "Organization 3",
       phone: 9989998975,
-      tenderValue: 1500000,
-      },
-      {
+      tenderValue: 6650000,
+    },
+    {
       id: 4,
-      vendorName: "Feastables",
-      orgName: "Mr.Beast",
+      vendorName: "Vendor 4",
+      orgName: "Organization 4",
       phone: 9989998975,
-      tenderValue: 1500000,
+      tenderValue: 4000,
     },
   ];
 
@@ -97,7 +98,7 @@ const AdminViewTender = () => {
   return (
     <>
       <Box>
-        {/* Navbar of Home Page */}
+        {/* Navbar */}
         <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
           <AppBar position="static" elevation={0}>
             <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
@@ -113,6 +114,9 @@ const AdminViewTender = () => {
               >
                 View Tender
               </Typography>
+              <IconButton edge="start" color="warning" aria-label="Logout">
+                <LoginIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
         </Box>

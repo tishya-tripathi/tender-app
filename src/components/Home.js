@@ -27,7 +27,7 @@ const Home = () => {
   return (
     <>
       <Box>
-        {/* Navbar of Home Page */}
+        {/* Navbar*/}
         <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
           <AppBar position="static" elevation={0}>
             <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
@@ -50,7 +50,7 @@ const Home = () => {
         {/* Body of Home Page */}
         <Box
           sx={{
-            backgroundColor: "#D4F1F4",
+            // backgroundColor: "#D4F1F4",
             height: "90vh",
             alignItems: "center",
           }}

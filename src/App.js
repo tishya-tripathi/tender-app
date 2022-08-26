@@ -7,6 +7,7 @@ import VendorSignup from "./components/VendorSignup";
 import AdminHome from "./components/AdminHome";
 import AdminUploadTender from "./components/AdminUploadTender";
 import AdminViewTender from "./components/AdminViewTender";
+import VendorUploadTender from "./components/VendorUploadTender";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
           <Route path="/admin/viewtender" exact element={<AdminViewTender />} />
 
 
+          <Route path="/vendor/uploadtender" exact element={<VendorUploadTender />} />
+          
         </Routes>
       </div>
     </Router>
