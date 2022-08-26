@@ -50,7 +50,7 @@ const Home = () => {
         {/* Body of Home Page */}
         <Box
           sx={{
-            backgroundColor: "#BFBFBF",
+            backgroundColor: "#D4F1F4",
             height: "90vh",
             alignItems: "center",
           }}
