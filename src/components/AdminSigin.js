@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,17 +17,45 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 
+const initialValues = {
+  email: "",
+  password: "",
+};
 
 const theme = createTheme();
 
+
 const AdminSignin = () => {
-  const handleSubmit = (event) => {
+
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+
+
+    navigate("/admin/home");
+  };
+
+  const [values, setValues] = React.useState(initialValues);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (value !== "") {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: null,
+      });
+    }
   };
 
   return (
@@ -78,6 +106,8 @@ const AdminSignin = () => {
               fullWidth
               label="Email Address"
               name="email"
+              value={values.email}
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -86,9 +116,10 @@ const AdminSignin = () => {
               name="password"
               label="Password"
               type="password"
+              value={values.password}
+              onChange={handleInputChange}
             />
             <Button
-              href="home"
               type="submit"
               fullWidth
               variant="contained"
