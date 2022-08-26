@@ -76,11 +76,8 @@ const AdminSignin = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
-              autoFocus
             />
             <TextField
               margin="normal"
@@ -89,8 +86,6 @@ const AdminSignin = () => {
               name="password"
               label="Password"
               type="password"
-              id="password"
-              autoComplete="current-password"
             />
             <Button
               href="home"

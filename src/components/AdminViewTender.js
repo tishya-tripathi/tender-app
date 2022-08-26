@@ -29,7 +29,10 @@ import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
 
 const AdminViewTender = () => {
   const theme = useTheme();
@@ -145,20 +148,35 @@ const AdminViewTender = () => {
 
         <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
+            <Grid item xs={8} sx={{}}>
+              <FormControl sx={{ width: 200 }}>
+                <InputLabel id="tender-name-label">Select Tender</InputLabel>
+                <Select
+                  labelId="tender-name-label"
+                  name="tenderName"
+                >
+                  <MenuItem value={"Tender 1"}>Tender 1</MenuItem>
+                  <MenuItem value={"Tender 2"}>Tender 2</MenuItem>
+                  <MenuItem value={"Tender 3"}>Tender 3</MenuItem>
+                  <MenuItem value={"Tender 4"}>Tender 4</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
             <Grid item xs={12} md={12} lg={12}>
               <Paper
                 sx={{
                   p: 2,
                   display: "flex",
                   flexDirection: "column",
-                  height: "70vh",
+                  height: "68vh",
                   backgroundColor: "#D4F1F4",
                 }}
               >
                 <Typography
                   variant="h5"
                   color="text.primary"
-                  sx={{ ml: 3, mt: 1, fontWeight: "bold" }}
+                  sx={{ ml: 2, fontWeight: "bold" }}
                 >
                   Tender Name : Lorem Ipsum Dolor Sit Amet
                 </Typography>
