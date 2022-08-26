@@ -28,6 +28,8 @@ import Stack from "@mui/material/Stack";
 import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import LogoutIcon from "@mui/icons-material/Logout";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+
 
 const AdminViewTender = () => {
   const theme = useTheme();
@@ -92,6 +94,24 @@ const AdminViewTender = () => {
       headerName: "Tender Value ( in \u20B9 )",
       flex: 1,
       minWidth: 200,
+    },
+    {
+      field: "tenderFile",
+      headerName: "Download Tender",
+      flex: 1,
+      minWidth: 200,
+      align: "left",
+      renderCell: (params) => {
+        return (
+          <Box textAlign="center">
+            <Button variant="text" color="primary"
+              onClick={()=>{console.log("Button clicked by :", params.row.vendorName, params.row.orgName)}}
+            >
+              <DownloadRoundedIcon />
+            </Button>
+          </Box>
+        );
+      },
     },
   ];
 
