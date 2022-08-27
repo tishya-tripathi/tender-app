@@ -10,7 +10,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LoginIcon from "@mui/icons-material/Login";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import CallIcon from "@mui/icons-material/Call";
-import InfoIcon from "@mui/icons-material/Info";
 import { styled, useTheme } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
