@@ -16,11 +16,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
+import { useNavigate } from "react-router-dom";
 
 
 
 const AdminViewTender = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate("/");  
+  }
+
   const rows = [
     {
       id: 1,
@@ -123,7 +130,7 @@ const AdminViewTender = () => {
               >
                 View Tender
               </Typography>
-              <IconButton edge="start" color="warning" aria-label="Logout">
+              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
                 <LoginIcon />
               </IconButton>
             </Toolbar>
