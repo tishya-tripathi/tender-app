@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,40 +13,65 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-
+const initialValues = {
+  email: "",
+  password: "",
+};
 
 const theme = createTheme();
 
 const VendorSignin = () => {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    navigate("/vendor/uploadtender");
   };
+
+  const [values, setValues] = React.useState(initialValues);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (value !== "") {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: null,
+      });
+    }
+  };
+
 
   return (
     <ThemeProvider theme={theme}>
-    <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-          <AppBar position="static" elevation={0}>
-            <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
-              <Typography
-                variant="h5"
-                component="div"
-                sx={{
-                  margin: "1rem",
-                  flexGrow: 1,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Tender Management Portal
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </Box>
+      <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
+        <AppBar position="static" elevation={0}>
+          <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                margin: "1rem",
+                flexGrow: 1,
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+              }}
+            >
+              Tender Management Portal
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -73,11 +98,10 @@ const VendorSignin = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
-              autoFocus
+              value={values.email}
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -86,11 +110,10 @@ const VendorSignin = () => {
               name="password"
               label="Password"
               type="password"
-              id="password"
-              autoComplete="current-password"
+              value={values.password}
+              onChange={handleInputChange}
             />
             <Button
-              href="uploadtender"
               type="submit"
               fullWidth
               variant="contained"
