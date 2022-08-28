@@ -8,18 +8,63 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+
+
+
+const initialValues = {
+  vendorName: "",
+  orgName: "",
+  phone: "",
+  otp: "",
+  email: "",
+  password: "",
+};
+
 
 const theme = createTheme();
 
 const VendorSignup = () => {
-  const handleSubmit = (event) => {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      vendorName: data.get("vendorName"),
+      orgName: data.get("orgName"),
+      phone: data.get("phone"),
+      otp:  data.get("otp"),
       email: data.get("email"),
       password: data.get("password"),
     });
+
+
+    navigate("/vendor/uploadtender");
   };
+
+  const [values, setValues] = React.useState(initialValues);
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (value !== "") {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: null,
+      });
+    }
+  };
+
+  const sendOTP = () => {
+    // Send OTP
+    console.log("Send OTP to ", values.phone);
+   };
 
   return (
     <ThemeProvider theme={theme}>
@@ -51,12 +96,7 @@ const VendorSignup = () => {
             alignItems: "center",
           }}
         >
-            {/* <Avatar sx={{ m: 1, bgcolor: "success.main" }}>
-                <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                Vendor Sign Up
-            </Typography> */}
+          
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -67,19 +107,20 @@ const VendorSignup = () => {
               margin="normal"
               required
               fullWidth
-              id="vendorname"
               label="Vendor Name"
-              name="vendorname"
-              autoFocus
+              name="vendorName"
+              value={values.vendorName}
+              onChange={handleInputChange}
             />
 
             <TextField
               margin="normal"
               required
               fullWidth
-              id="orgname"
               label="Organization Name"
-              name="orgname"              
+              name="orgName"   
+              value={values.orgName}
+              onChange={handleInputChange}
             />
 
             <TextField
@@ -87,31 +128,34 @@ const VendorSignup = () => {
               required
               type="phone"
               fullWidth
-              id="phone"
               label="Phone Number (+91)"
-              name="phone"              
+              name="phone"  
+              value={values.phone}
+              onChange={handleInputChange}
             />
             
-            <Button xs variant="outlined">
+            <Button xs="true" variant="outlined" onClick={sendOTP}>
                 Send OTP
             </Button>
             <TextField
-              xs
+              xs="true"
               margin="normal"
               required
               fullWidth
-              id="otp"
               label="Enter OTP"
-              name="otp"              
+              name="otp"  
+              value={values.otp}
+              onChange={handleInputChange}
             />
 
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Email Address"
-              name="email"              
+              name="email"
+              value={values.email}
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -120,8 +164,8 @@ const VendorSignup = () => {
               name="password"
               label="Password"
               type="password"
-              id="password"
-            />
+              value={values.password}
+              onChange={handleInputChange}            />
             <Button
               type="submit"
               fullWidth
