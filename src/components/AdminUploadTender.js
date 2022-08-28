@@ -18,9 +18,17 @@ import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { NavigateBefore } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const AdminUploadTender = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate("/");  
+  }
+
 
   const [startDate, setStartDate] = React.useState(new Date());
   const handleStartDateChange = (newValue) => {
@@ -30,6 +38,7 @@ const AdminUploadTender = () => {
   const handleEndDateChange = (newValue) => {
     setEndDate(newValue);
   };
+
 
   return (
     <>
@@ -50,7 +59,7 @@ const AdminUploadTender = () => {
               >
                 Upload Tender
               </Typography>
-              <IconButton edge="start" color="warning" aria-label="Logout">
+              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
                 <LoginIcon />
               </IconButton>
             </Toolbar>

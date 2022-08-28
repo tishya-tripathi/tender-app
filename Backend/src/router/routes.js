@@ -40,7 +40,7 @@ module.exports = function (app, db) {
             k.verified &&
             k.email &&
             k.password &&
-            k.admin
+            !k.admin
 
         ) {
             // check if record already exists...

@@ -16,9 +16,16 @@ import Stack from "@mui/material/Stack";
 import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
+import { useNavigate } from "react-router-dom";
 
 const VendorUploadTender = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate("/");  
+  }
+
 
   return (
     <>
@@ -39,7 +46,7 @@ const VendorUploadTender = () => {
               >
                 Upload Tender
               </Typography>
-              <IconButton edge="start" color="warning" aria-label="Logout">
+              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
                 <LoginIcon />
               </IconButton>
             </Toolbar>

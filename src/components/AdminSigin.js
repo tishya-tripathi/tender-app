@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -11,35 +12,51 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const initialValues = {
   email: "",
   password: "",
 };
 
+// Used for snackbar Alert
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const theme = createTheme();
 
-
 const AdminSignin = () => {
-  
-
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const credentials = {
       email: data.get("email"),
       password: data.get("password"),
+      admin: true,
+    };
+
+    axios({
+      url: "http://localhost:6969/signin",
+      method: "POST",
+      data: credentials,
+    }).then((res) => {
+      // console.log(res);
+      if (res.data.status === "success") {
+        navigate("/admin/home");
+      } else {
+        // Add Snackbar For Incorrect Details : TODO
+        setOpen(true);
+      }
     });
-
-
-    navigate("/admin/home");
   };
 
   const [values, setValues] = React.useState(initialValues);
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (value !== "") {
@@ -55,26 +72,40 @@ const AdminSignin = () => {
     }
   };
 
+  // -----Opening and Closing snackbar-----
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
-    <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-          <AppBar position="static" elevation={0}>
-            <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
-              <Typography
-                variant="h5"
-                component="div"
-                sx={{
-                  margin: "1rem",
-                  flexGrow: 1,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Tender Management Portal
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </Box>
+      <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
+        <AppBar position="static" elevation={0}>
+          <Toolbar sx={{ background: "#021B38", height: "10vh" }}>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                margin: "1rem",
+                flexGrow: 1,
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+              }}
+            >
+              Tender Management Portal
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -127,6 +158,11 @@ const AdminSignin = () => {
           </Box>
         </Box>
       </Container>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Invalid username or password
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 };
