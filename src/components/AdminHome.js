@@ -6,8 +6,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import LoginIcon from "@mui/icons-material/Login";
+<<<<<<< Updated upstream
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import CallIcon from "@mui/icons-material/Call";
 import { styled, useTheme } from "@mui/material/styles";
@@ -20,6 +20,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from "@mui/icons-material/Logout";
+=======
+import { useTheme } from "@mui/material/styles";
+>>>>>>> Stashed changes
 
 
 const AdminHome = () => {

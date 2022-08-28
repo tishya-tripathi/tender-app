@@ -5,21 +5,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import LoginIcon from "@mui/icons-material/Login";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import CallIcon from "@mui/icons-material/Call";
-import InfoIcon from "@mui/icons-material/Info";
-import { styled, useTheme } from "@mui/material/styles";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import { useTheme } from "@mui/material/styles";
 
 const Home = () => {
   const theme = useTheme();
@@ -50,7 +36,6 @@ const Home = () => {
         {/* Body of Home Page */}
         <Box
           sx={{
-            // backgroundColor: "#D4F1F4",
             height: "90vh",
             alignItems: "center",
           }}
