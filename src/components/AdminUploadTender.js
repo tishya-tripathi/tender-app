@@ -53,18 +53,18 @@ const AdminUploadTender = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
 
     const newTender = {
       // File Upload
-      tenderName: data.get("tenderName"),
+      tenderName: formData.get("tenderName"),
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
       admin: true,
     };
     console.log(newTender);
 
-    // AXIOS Connection
+    // AXIOS Connection - TODO
   };
 
   const [values, setValues] = React.useState({

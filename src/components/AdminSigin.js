@@ -49,7 +49,6 @@ const AdminSignin = () => {
       if (res.data.status === "success") {
         navigate("/admin/home");
       } else {
-        // Add Snackbar For Incorrect Details : TODO
         setOpen(true);
       }
     });

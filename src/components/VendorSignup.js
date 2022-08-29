@@ -61,7 +61,6 @@ const VendorSignup = () => {
       if (res.data.status === "success") {
         navigate("/vendor/uploadtender");
       } else {
-        // Add Snackbar For Incorrect Details : TODO
         setOpen(true);
       }
     });
