@@ -20,15 +20,75 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { NavigateBefore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import AdminCardComponent from "./AdminCardComponent";
+
+const data = [
+  {
+    tenderName: "Tender Name 1",
+    startDate: "22/09/2022",
+    endDate: "30/09/2022",
+  },
+  {
+    tenderName: "Tender Name 2",
+    startDate: "22/09/2022",
+    endDate: "30/09/2022",
+  },
+  {
+    tenderName: "Tender Name 3",
+    startDate: "22/09/2022",
+    endDate: "30/09/2022",
+  },
+];
 
 const AdminUploadTender = () => {
   const theme = useTheme();
+  const formatDate = (param) => {
+    var x = new Date(param);
+    var date = ("0" + x.getDate().toString()).slice(-2);
+    var month = ("0" + x.getMonth().toString()).slice(-2);
+    var year = x.getFullYear().toString();
+    return month + "/" + date + "/" + year;
+  };
   const navigate = useNavigate();
 
-  const logout = () => {
-    navigate("/");  
-  }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
 
+    const newTender = {
+      // File Upload
+      tenderName: data.get("tenderName"),
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
+      admin: true,
+    };
+    console.log(newTender);
+
+    // AXIOS Connection
+  };
+
+  const [values, setValues] = React.useState({
+    tenderName: "Tender: Add New Tender Name",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (value !== "") {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: null,
+      });
+    }
+  };
+
+  const logout = () => {
+    navigate("/");
+  };
 
   const [startDate, setStartDate] = React.useState(new Date());
   const handleStartDateChange = (newValue) => {
@@ -38,7 +98,6 @@ const AdminUploadTender = () => {
   const handleEndDateChange = (newValue) => {
     setEndDate(newValue);
   };
-
 
   return (
     <>
@@ -59,7 +118,12 @@ const AdminUploadTender = () => {
               >
                 Upload Tender
               </Typography>
-              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
+              <IconButton
+                edge="start"
+                color="warning"
+                aria-label="Logout"
+                onClick={logout}
+              >
                 <LoginIcon />
               </IconButton>
             </Toolbar>
@@ -67,19 +131,14 @@ const AdminUploadTender = () => {
         </Box>
 
         {/* Body */}
-        {/* <Box
-          sx={{
-            height: "90vh",
-            alignItems: "center",
-            backgroundColor: "pink",
-          }}
-        >
-        
-        </Box> */}
+
         <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
+            {/* Add New Tender */}
             <Grid item xs={12} md={12} lg={12}>
               <Paper
+                component="form"
+                onSubmit={handleSubmit}
                 sx={{
                   p: 2,
                   display: "flex",
@@ -94,18 +153,12 @@ const AdminUploadTender = () => {
                   columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   <Grid item xs={11}>
-                    {/* <Typography
-                      variant="h5"
-                      color="text.primary"
-                      sx={{ ml: 3, mt: 1, fontWeight: "bold"  }}
-                    >
-                      Tender 
-                    </Typography> */}
                     <TextField
                       sx={{ ml: "2rem", width: "30vw" }}
-                      name="tendername"
+                      name="tenderName"
                       variant="outlined"
-                      defaultValue={"Tender Name : Lorem Ipsum Dolor Sit Amet"}
+                      value={values.tenderName}
+                      onChange={handleInputChange}
                     />
                     <br></br>
                     <br></br>
@@ -149,6 +202,7 @@ const AdminUploadTender = () => {
                       </LocalizationProvider>
 
                       <Button
+                        type="submit"
                         startIcon={<CheckBoxRoundedIcon />}
                         variant="contained"
                         color="success"
@@ -160,105 +214,14 @@ const AdminUploadTender = () => {
                     <br></br>
                     <br></br>
                   </Grid>
-                  <Grid item xs={1}>
-                    <IconButton color="error">
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  </Grid>
                 </Grid>
               </Paper>
             </Grid>
+            {/* --------------------------------------------------------- */}
 
-            <Grid item xs={12} md={12} lg={12}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 170,
-                  backgroundColor: "#D4F1F4",
-                }}
-              >
-                <Grid
-                  container
-                  rowSpacing={1}
-                  columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                >
-                  <Grid item xs={11}>
-                    {/* <Typography
-                      variant="h5"
-                      color="text.primary"
-                      sx={{ ml: 3, mt: 1, fontWeight: "bold"  }}
-                    >
-                      Tender 
-                    </Typography> */}
-                    <TextField
-                      sx={{ ml: "2rem", width: "30vw" }}
-                      name="tendername"
-                      variant="outlined"
-                      defaultValue={"Tender Name : Lorem Ipsum Dolor Sit Amet"}
-                    />
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      justifyContent="space-evenly"
-                    >
-                      <Button
-                        component="label"
-                        startIcon={<UploadFileRoundedIcon />}
-                        variant="contained"
-                        sx={{ width: "10vw" }}
-                      >
-                        File
-                        <input type="file" hidden />
-                      </Button>
-
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DesktopDatePicker
-                          label="Start Date"
-                          minDate={new Date()}
-                          value={startDate}
-                          onChange={handleStartDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
-
-                      <LocalizationProvider
-                        dateAdapter={AdapterDateFns}
-                        sx={{}}
-                      >
-                        <DesktopDatePicker
-                          label="End Date"
-                          minDate={new Date()}
-                          value={endDate}
-                          onChange={handleEndDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
-
-                      <Button
-                        startIcon={<CheckBoxRoundedIcon />}
-                        variant="contained"
-                        color="success"
-                        sx={{ width: "10vw" }}
-                      >
-                        Save
-                      </Button>
-                    </Stack>
-                    <br></br>
-                    <br></br>
-                  </Grid>
-                  <Grid item xs={1}>
-                    <IconButton color="error">
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
+            {/* Display existing tenders */}
+            <AdminCardComponent data={data} />
+            {/* --------------------------------------------------------- */}
           </Grid>
         </Container>
       </Box>
