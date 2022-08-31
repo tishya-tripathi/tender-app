@@ -1,10 +1,10 @@
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const cookieParser = require("cookie-parser")
-const sessions = require('express-session')
-const mongo = require("./src/config/database.config.js")
-const multer=require('multer');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const sessions = require("express-session");
+const mongo = require("./src/config/database.config.js");
+const multer = require("multer");
 
 // Abhishek Jaiswal:- Let's check it out!!!!!!!
 // mailto:-abhigrmr@gmail.com
@@ -22,7 +22,6 @@ app.use(cors(corsOptions));
 
 // creating 24 hours from milliseconds
 const oneDay = 1000 * 60 * 60 * 24;
-
 
 //session middleware
 app.use(
