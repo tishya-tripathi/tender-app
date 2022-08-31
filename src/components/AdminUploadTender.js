@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -51,20 +52,39 @@ const AdminUploadTender = () => {
   };
   const navigate = useNavigate();
 
+  // a local state to store the currently selected file.
+  const [selectedFile, setSelectedFile] = React.useState(null);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-
+    formData.append("file", selectedFile)
     const newTender = {
       // File Upload
       tenderName: formData.get("tenderName"),
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
       admin: true,
+      file: formData.get("file")
     };
     console.log(newTender);
 
     // AXIOS Connection - TODO
+    try {
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:6969/upload",
+        data: newTender,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    } catch(error) {
+      console.log(error)
+    }
+  };
+
+  const handleFileSelect = (event) => {
+    console.log(event.target.files[0]);
+    setSelectedFile(event.target.files[0]);
   };
 
   const [values, setValues] = React.useState({
@@ -175,7 +195,7 @@ const AdminUploadTender = () => {
                         sx={{ width: "10vw" }}
                       >
                         File
-                        <input type="file" hidden />
+                        <input type="file" onChange={handleFileSelect} hidden />
                       </Button>
 
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
