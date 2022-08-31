@@ -59,13 +59,13 @@ const port = process.env.PORT || 6969; // Unique port not to conflict...
 
 // Init database connection
 mongo.connect((err, db) => {
-  if (err) throw err;
-  console.log(db);
-  // Require routes
-  require("./src/router/signin")(app, db);
-  require("./src/router/routes")(app, db);
-  require("./src/router/routesAdmin")(app, db);
-});
+    if (err) throw err
+    console.log(db)
+    // Require routes
+    require("./src/router/signin")(app, db)
+    require("./src/router/routes")(app, db)
+})
+
 
 // server listening
 app.listen(port, () => {
