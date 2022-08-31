@@ -1,3 +1,4 @@
+// const dbConnect=require('./mongodb');
 const multer = require('multer');
 module.exports = function (app, db) {
     // dummy route
@@ -39,9 +40,8 @@ module.exports = function (app, db) {
                 cb(null, file.fieldname + "_" + Date.now() + ".pdf")
             }
         })
-    }).single("file_upload",);
-    app.post("/upload", upload, (req, res) => {
-        // res.json({ file: req.file });
+    }).single("file_upload");
+    app.post("/upload_vender_admin", upload, (req, res) => {
         let k = req.body;
 
         let temp = req.file;
@@ -49,68 +49,370 @@ module.exports = function (app, db) {
         // console.log(k);
         // console.log(temp.fieldname);
         let page;
-        if(temp.fieldname)
+        if (temp.fieldname)
             page = req.file.originalname;
-        let smooth=1;
-        if(!page)
-            smooth=0;
+        let smooth = 1;
+        if (!page)
+            smooth = 0;
 
         // console.log(page.length)
-        let size=0;
-        if(page.length && smooth)
-            size=1;
-        // console.log(k.tenderName);
-        // console.log(page);
-        if (size != 0 &&
-            k.tenderName &&
-            k.startDate && 
-            k.email &&
-            k.endDate) {
-            let obj = {
-                email: k.email,
-                profile: {
-                    file:req.file,
-                    tenderName: k.tenderName,
-                    startDate: k.startDate,
-                    endDate: k.endDate,
-                },
-            };
-            db.collection("files").insertOne(obj, (error, results) => {
-                if (error) {
-                    res.json({
-                        status: "error",
-                        message: error,
-                        isLogged: false,
-                    });
-                    throw error;
-                }
-                // Records inserted, auto log in
-                else {
-                    // log it in
-                    req.session.userid = k.email;
-                    req.session.profile = obj.profile;
-                    req.session.lastUpdated = new Date();
-                    res.json({
-                        status: "success",
-                        message: "File Uploaded  !",
-                        lastUpdated: req.session.lastUpdated,
-                        isLatest: true,
-                        isLogged: true,
-                        profile: obj.profile,
-                    });
-                }
+        let size = 0;
+        if (page.length && smooth)
+            size = 1;
+        // Check if already logged in ?
+        if (req.session && req.session.userid) {
+            res.json({
+                status: "warn",
+                message: "Session already exists !",
+                isLogged: true,
+                lastUpdated: req.session.lastUpdated,
+                isLatest: false,
+                // keys: req.session.keys,
+                profile: req.session.profile,
             });
         }
-        else {
+        // check if any value is not null
+        else if (
+            size != 0 &&
+            k.tenderName &&
+            k.startDate &&
+            k.endDate
+
+        ) {
+            // check if record already exists...
+            db.collection("files").findOne(
+                { tenderName: k.tenderName },
+                { projection: { _id: 1, tenderName: 1 } },
+                (error, result) => {
+                    if (result && result._id) {
+                        res.json({
+                            status: "error",
+                            message: "File already exists !",
+                            isLogged: false,
+                        });
+                    }
+                    // tenderName doesn't exists, create one
+                    else {
+                        let obj = {
+                            tenderName: k.tenderName,
+                            profile: {
+                                file: req.file,
+                                startDate: k.startDate,
+                                endDate: k.endDate,
+                            },
+
+                        };
+                        db.collection("files").insertOne(obj, (error, results) => {
+                            if (error) {
+                                res.json({
+                                    status: "error",
+                                    message: error,
+                                    isLogged: false,
+                                });
+                                throw error;
+                            }
+                            // Records inserted, auto log in
+                            else {
+                                // log it in
+                                res.json({
+                                    status: "success",
+                                    message: "File Uploaded !",
+                                    isLatest: true,
+                                    isLogged: true,
+                                    profile: obj.profile,
+                                });
+                            }
+                        });
+                    }
+                }
+            );
+        } else {
+            // some fields are null
             res.json({
                 status: "error",
-                message: "Empty or invalid file",
+                message: "Empty or invalid data",
                 isLogged: false,
             });
         }
-
-        // res.send("File Upload")
     });
+    // app.post("/upload_vender_admin", upload, (req, res) => {
+    //     // res.json({ file: req.file });
+    //     let k = req.body;
+
+    //     let temp = req.file;
+    //     // console.log(temp);
+    //     // console.log(k);
+    //     // console.log(temp.fieldname);
+    //     let page;
+    //     if (temp.fieldname)
+    //         page = req.file.originalname;
+    //     let smooth = 1;
+    //     if (!page)
+    //         smooth = 0;
+
+    //     // console.log(page.length)
+    //     let size = 0;
+    //     if (page.length && smooth)
+    //         size = 1;
+    //     // console.log(k.tenderName);
+    //     // console.log(page);
+    //     if (size != 0 &&
+    //         k.tenderName &&
+    //         k.startDate &&
+    //         k.endDate) {
+    //         let obj = {
+    //             tenderName: k.tenderName,
+    //             profile: {
+    //                 file: req.file,
+    //                 startDate: k.startDate,
+    //                 endDate: k.endDate,
+    //             },
+    //         };
+    //         db.collection("files").insertOne(obj, (error, results) => {
+    //             if (error) {
+    //                 res.json({
+    //                     status: "error",
+    //                     message: error,
+    //                     isLogged: false,
+    //                 });
+    //                 throw error;
+    //             }
+    //             // Records inserted, auto log in
+    //             else {
+    //                 // log it in
+    //                 req.session.userid = k.tenderName;
+    //                 req.session.profile = obj.profile;
+    //                 req.session.lastUpdated = new Date();
+    //                 res.json({
+    //                     status: "success",
+    //                     message: "File Uploaded  !",
+    //                     lastUpdated: req.session.lastUpdated,
+    //                     isLatest: true,
+    //                     isLogged: true,
+    //                     profile: obj.profile,
+    //                 });
+    //             }
+    //         });
+    //     }
+    //     else {
+    //         res.json({
+    //             status: "error",
+    //             message: "Empty or invalid file",
+    //             isLogged: false,
+    //         });
+    //     }
+
+    //     // res.send("File Upload")
+    // });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
+    const upload_tender = multer({
+        storage: multer.diskStorage({
+            destination: function (req, file, cb) {
+                // console.log(file+" ");
+                // console.log(file.fieldname+" ");
+                // console.log(file.size);
+                // console.log(file.filename);
+                cb(null, "uploads_tender")
+            },
+            filename: function (req, file, cb) {
+                // console.log(file.originalname);
+                let name = file.originalname;
+                if (name.length) {
+                    // req.json({ file: req.file });
+                    // console.log(req.params);
+                    // console.log(name);
+                    // console.log(req.file);
+                    // console.log(name.length);
+                    // console.log(req.body);
+                }
+                cb(null, file.fieldname + "_" + Date.now() + ".pdf")
+            }
+        })
+    }).single("tender_file");
+    app.post("/upload_tender_file", upload_tender, (req, res) => {
+        let k = req.body;
+
+        let temp = req.file;
+        // console.log(temp);
+        // console.log(k);
+        // console.log(temp.fieldname);
+        let page;
+        if (temp.fieldname)
+            page = req.file.originalname;
+        let smooth = 1;
+        if (!page)
+            smooth = 0;
+
+        // console.log(page.length)
+        let size = 0;
+        if (page.length && smooth)
+            size = 1;
+        // Check if already logged in ?
+        if (req.session && req.session.userid) {
+            res.json({
+                status: "warn",
+                message: "Session already exists !",
+                isLogged: true,
+                lastUpdated: req.session.lastUpdated,
+                isLatest: false,
+                // keys: req.session.keys,
+                profile: req.session.profile,
+            });
+        }
+        // check if any value is not null
+        else if (
+            size != 0 &&
+            k.tenderName &&
+            k.tenderValue
+
+        ) {
+            // check if record already exists...
+            db.collection("tender_files").findOne(
+                { tenderName: k.tenderName },
+                { projection: { _id: 1, tenderName: 1 } },
+                (error, result) => {
+                    if (result && result._id) {
+                        res.json({
+                            status: "error",
+                            message: "File already exists !",
+                            isLogged: false,
+                        });
+                    }
+                    // tenserName doesn't exists, create one
+                    else {
+                        let obj = {
+                            tenderName: k.tenderName,
+                            profile: {
+                                file: req.file,
+                                tenderValue: k.tenderVaue,
+                            },
+
+                        };
+                        db.collection("tender_files").insertOne(obj, (error, results) => {
+                            if (error) {
+                                res.json({
+                                    status: "error",
+                                    message: error,
+                                    isLogged: false,
+                                });
+                                throw error;
+                            }
+                            // Records inserted, auto log in
+                            else {
+                                // log it in
+                                res.json({
+                                    status: "success",
+                                    message: "File Uploaded !",
+                                    isLatest: true,
+                                    isLogged: true,
+                                    profile: obj.profile,
+                                });
+                            }
+                        });
+                    }
+                }
+            );
+        } else {
+            // some fields are null
+            res.json({
+                status: "error",
+                message: "Empty or invalid data",
+                isLogged: false,
+            });
+        }
+    });
+    // app.post("/upload_tender_file", upload_tender, (req, res) => {
+    //     // res.json({ file: req.file });
+    //     let k = req.body;
+
+    //     let temp = req.file;
+    //     // console.log(temp);
+    //     // console.log(k);
+    //     // console.log(temp.fieldname);
+    //     let page;
+    //     if (temp.fieldname)
+    //         page = req.file.originalname;
+    //     let smooth = 1;
+    //     if (!page)
+    //         smooth = 0;
+
+    //     // console.log(page.length)
+    //     let size = 0;
+    //     if (page.length && smooth)
+    //         size = 1;
+    //     // console.log(k.tenderName);
+    //     // console.log(page);
+    //     if (size != 0 &&
+    //         k.tenderName &&
+    //         k.tenderValue) {
+    //         db.collection("tender_files").findOne(
+    //             { tenderName: k.tenderName },
+    //             { projection: { _id: 1, tenderName: 1 } },
+    //             (error, result) => {
+    //                 if (result && result._id) {
+    //                     res.json({
+    //                         status: "error",
+    //                         message: "User already exists !",
+    //                         isLogged: false,
+    //                     });
+    //                     console.log("Data Found");
+    //                 }
+    //                 else{
+    //                     res.json({
+    //                         status: "error",
+    //                         message: error,
+    //                         isLogged: false,
+    //                     });
+    //                 }
+    //             });
+    //     } else if (
+    //         size != 0 &&
+    //         k.tenderName &&
+    //         k.tenderValue){
+    //             let obj = {
+    //             tenderName: k.tenderName,
+    //             profile: {
+    //                 file: req.file,
+    //                 tenderValue: k.tenderValue,
+    //             },
+    //         };
+    //         db.collection("tender_files").insertOne(obj, (error, results) => {
+    //             if (error) {
+    //                 res.json({
+    //                     status: "error",
+    //                     message: error,
+    //                     isLogged: false,
+    //                 });
+    //                 throw error;
+    //             }
+    //             // Records inserted, auto log in
+    //             else {
+    //                 // log it in
+    //                 req.session.userid = k.tenderName;
+    //                 req.session.profile = obj.profile;
+    //                 req.session.lastUpdated = new Date();
+    //                 res.json({
+    //                     status: "success",
+    //                     message: "File Uploaded  !",
+    //                     lastUpdated: req.session.lastUpdated,
+    //                     isLatest: true,
+    //                     isLogged: true,
+    //                     profile: obj.profile,
+    //                 });
+    //             }
+    //         });
+    //     }
+    //     else {
+    //         res.json({
+    //             status: "error",
+    //             message: "Empty or invalid file",
+    //             isLogged: false,
+    //         });
+    //     }
+
+    //     // res.send("File Upload")
+    // });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     // get all vendors
@@ -138,6 +440,107 @@ module.exports = function (app, db) {
     });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
+    app.get("/all_files", (req, res) => {
+        try {
+            let k = req.body;
+            console.log(k);
+            db.collection("files")
+                .find()
+                .toArray((error, results) => {
+                    if (error) {
+                        res.json({
+                            status: "error",
+                            message: "unable to fetch data with requested params",
+                            isLogged: true,
+                        });
+                        throw error;
+                    }
+                    res.json(results);
+                });
+        } catch (error) {
+            console.log(error);
+            res.send(error);
+        }
+    });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
+    // app.get("/vender_files", (req, res) => {
+    //     let k = req.body;
+    //     console.log(req.body);
+    //     // Check if already logged in ?
+    //     if (req.session && req.session.userid) {
+    //         res.json({
+    //             status: "warn",
+    //             message: "Session already exists !",
+    //             isLogged: true,
+    //             lastUpdated: req.session.lastUpdated,
+    //             isLatest: false,
+    //             // keys: req.session.keys,
+    //             profile: req.session.profile,
+    //         });
+    //     }
+    //     // check if any value is not null
+    //     else  if(k.url){
+    //         // check if record already exists...
+    //         db.collection("members").findOne(
+                // { email: k.email },
+                // { projection: { _id: 1, email: 1 } },
+                // (error, result) => {
+                //     if (result && result._id) {
+                //         res.json({
+                //             status: "Sucess",
+                //             message: "File exists !",
+                //             isLogged: false,
+                //         });
+                //     }
+                //     // tenderName doesn't exists, create one
+                //     else {
+                //         res.json({
+                //             status: "error",
+                //             message: "Empty or invalid file url",
+                //             isLogged: false,
+    //                     });
+    //                 }
+    //             }
+    //         );
+    //     } else {
+    //         // some fields are null
+    //         res.json({
+    //             status: "error",
+    //             message: "Empty or invalid data",
+    //             isLogged: false,
+    //         });
+    //     }
+    // });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
+    app.delete("/delete_vender",(req,res)=>{
+        console.log(req.body.email);
+        let k=req.body;
+        db.collection("members").findOne(
+            { email: k.email },
+            { projection: { _id: 1, email: 1 } },
+            (error, result) => {
+                if (result && result._id) {
+                    // res.json({
+                    //     result
+                    // });
+                    const resu = db.collection("members").deleteOne({email:k.email});
+                    res.send(resu);
+                }
+                else{
+                    // console.log(results);
+                    // res.json(results);
+                    res.json({
+                        status: "error",
+                        message: "Empty or invalid email",
+                        isLogged: false,
+                    });
+                }
+            });
+    });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
     // combined data of files and members
     app.get("/all_data", (req, res) => {
         console.log("insides");
@@ -150,7 +553,7 @@ module.exports = function (app, db) {
                         foreignField: "email",
                         as: "comp",
                     },
-                    
+
                 },
                 {
                     $lookup: {
@@ -209,7 +612,7 @@ module.exports = function (app, db) {
                             isLogged: false,
                         });
                     }
-                    // usn doesn't exists, create one
+                    // email doesn't exists, create one
                     else {
                         let obj = {
                             email: k.email,

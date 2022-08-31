@@ -1,7 +1,6 @@
 module.exports = function (app, db) {
 
     // ---------------------admin login starts-----------------
-    // post route for login ( Accepts all Admin, Mentor and Students login)
     app.post("/signin", (req, res) => {
         console.log("hello from signin admin");
         let k = req.body
@@ -22,7 +21,7 @@ module.exports = function (app, db) {
         }
         // check if values aren't null
         else if (k.email && k.password && k.admin==="true") {
-            // Fetch fields matching Usn and pass
+            // Fetch fields matching email and pass
             // let q = (k.accountType === "admin") ? "admin" : "admin"
             // console.log("After login ");
             // console.log(k);
@@ -70,7 +69,7 @@ module.exports = function (app, db) {
                 }
             })
         }
-        // either of usn or password is null
+        // either of email or password is null
         else {
             console.log("Account type is incorrect")
             res.json({
@@ -105,7 +104,7 @@ module.exports = function (app, db) {
         else if (k.email && k.password && k.admin==="false") {
             console.log("After login ");
             console.log(k);
-            // Fetch fields matching Usn and pass
+            // Fetch fields matching Email and pass
             // let q = (k.admin === "false") ? "true" : "false"
             // console.log(q);
             db.collection("members").findOne({ email: k.email, password: k.password , admin:k.admin}, {
@@ -152,7 +151,7 @@ module.exports = function (app, db) {
                 }
             })
         }
-        // either of usn or password is null
+        // either of email or password is null
         else {
             console.log("Account type is incorrect")
             res.json({
@@ -178,13 +177,12 @@ module.exports = function (app, db) {
     // status, check if already logged in or not
     // useful during browser reload
     // must check on first page visit
-    // Works for all Mentors, Admin and Students
     app.get("/status", (req, res) => {
         // already logged in, redirect user to their profile
         if (req.session && req.session.userid) {
             console.log(req.session)
-            let q = (req.session.accountType === "admin") ? "admins" : "students"
-            db.collection(q).findOne({ usn: req.session.userid }, {
+            // let q = (req.session.admin === true) ? "members" :false;
+            db.collection("members").findOne({ email: req.session.userid }, {
                 projection: {
                     _id: 0,
                     profile: 1
@@ -197,7 +195,7 @@ module.exports = function (app, db) {
                         isLogged: true,
                         lastUpdated: req.session.lastUpdated,
                         isLatest: false,
-                        isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "mentor")) ? true : false,
+                        isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "vendor")) ? true : false,
                         errorLatest: error,
                         // keys: req.session.keys,
                         profile: req.session.profile,
@@ -211,7 +209,7 @@ module.exports = function (app, db) {
                         isLatest: true,
                         isLogged: true,
                         isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "mentor")) ? true : false,
-                        profile: result.profile,
+                        // profile: result.profile,
                     })
                 }
             })

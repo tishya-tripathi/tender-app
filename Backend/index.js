@@ -52,7 +52,6 @@ mongo.connect((err, db) => {
     // Require routes
     require("./src/router/signin")(app, db)
     require("./src/router/routes")(app, db)
-    require("./src/router/routesAdmin")(app, db)
 })
 
 // server listening
