@@ -4,7 +4,7 @@ module.exports = function (app, db) {
     app.post("/signin", (req, res) => {
         console.log("hello from signin admin");
         let k = req.body
-        let temp = k.email && k.password && k.admin === "true";
+        let temp = k.email && k.password && k.admin === true;
         console.log(temp);
         // console.log(k);
         // Check if session already exists ?
@@ -20,8 +20,8 @@ module.exports = function (app, db) {
             })
         }
         // check if values aren't null
-        else if (k.email && k.password && k.admin==="true") {
-            // Fetch fields matching email and pass
+
+        else if (k.email && k.password && k.admin===true) {
             // let q = (k.accountType === "admin") ? "admin" : "admin"
             // console.log("After login ");
             // console.log(k);
@@ -86,7 +86,7 @@ module.exports = function (app, db) {
     app.post("/vendors_signin", (req, res) => {
         console.log("hello from signin from vendors");
         let k = req.body
-        let temp = k.email && k.password && k.admin === "false";
+        let temp = k.email && k.password && k.admin === false;
         console.log(temp);
         // console.log(k);
         // Check if session already exists ?
@@ -101,7 +101,7 @@ module.exports = function (app, db) {
             })
         }
         // check if values aren't null
-        else if (k.email && k.password && k.admin==="false") {
+        else if (k.email && k.password && k.admin===false) {
             console.log("After login ");
             console.log(k);
             // Fetch fields matching Email and pass

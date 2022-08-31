@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +12,11 @@ import { useTheme } from "@mui/material/styles";
 
 const AdminHome = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate("/");  
+  }
 
   return (
     <>
@@ -32,7 +37,7 @@ const AdminHome = () => {
               >
                 Tender Management Portal
               </Typography>
-              <IconButton edge="start" color="warning" aria-label="Logout">
+              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
                 <LoginIcon />
               </IconButton>
             </Toolbar>
