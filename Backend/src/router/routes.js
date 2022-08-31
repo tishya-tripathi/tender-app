@@ -285,7 +285,7 @@ module.exports = function (app, db) {
                             tenderName: k.tenderName,
                             profile: {
                                 file: req.file,
-                                tenderValue: k.tenderVaue,
+                                tenderValue: k.tenderValue,
                             },
 
                         };

@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
@@ -10,14 +11,37 @@ import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 
 const VendorCardComponent = ({ data }) => {
+  const [selectedFile, setSelectedFile] = React.useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     
     console.log("Tender Name : ", event.target.querySelector("h5").innerText);
     console.log("Tender Value : ", event.target.tenderValue.value);
+
+    const formData = new FormData(event.currentTarget);
+    formData.append("file", selectedFile)
+    const newTender = {
+      // File Upload
+      tenderName: event.target.querySelector("h5").innerText,
+      tenderValue: event.target.tenderValue.value,
+      admin: false,
+      tender_file: formData.get("file")
+    };
+    console.log(newTender);
       
     // AXIOS Connection - TODO
+    try {
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:6969/upload_tender_file",
+        data: newTender,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    } catch(error) {
+      console.log(error)
+    }
     };
     
 
@@ -31,6 +55,10 @@ const VendorCardComponent = ({ data }) => {
     const uploadFile = async (name) => {
         console.log("Upload File : ", name);
     };  
+
+    const handleFileSelect = (event) => {
+      setSelectedFile(event.target.files[0])
+    }
     
 
   return (
@@ -86,7 +114,7 @@ const VendorCardComponent = ({ data }) => {
                       onChange={() => {uploadFile(data.tenderName)}}
                     >
                       Upload File
-                      <input type="file" hidden />
+                      <input type="file" onChange={handleFileSelect} hidden />
                     </Button>
 
                     <TextField
