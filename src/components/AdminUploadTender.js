@@ -65,7 +65,7 @@ const AdminUploadTender = () => {
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
       admin: true,
-      file: formData.get("file")
+      file_upload: formData.get("file")
     };
     console.log(newTender);
 
@@ -73,7 +73,7 @@ const AdminUploadTender = () => {
     try {
       const response = await axios({
         method: "post",
-        url: "http://localhost:6969/upload",
+        url: "http://localhost:6969/upload_vender_admin",
         data: newTender,
         headers: { "Content-Type": "multipart/form-data" },
       });
