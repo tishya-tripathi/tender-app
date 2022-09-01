@@ -12,6 +12,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { firebase, auth } from "../firebase";
+// import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 const initialValues = {
   vendorName: "",
@@ -27,14 +29,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function generateOTP(min, max) {
-  return Math.trunc(Math.random() * (max - min) + min);
-}
-
 const theme = createTheme();
 
 const VendorSignup = () => {
-
   const navigate = useNavigate();
   const axios = require("axios");
 
@@ -52,18 +49,22 @@ const VendorSignup = () => {
       admin: false,
     };
 
-    axios({
-      url: "http://localhost:6969/register",
-      method: "POST",
-      data: credentials,
-    }).then((res) => {
-      // console.log(res);
-      if (res.data.status === "success") {
-        navigate("/vendor/uploadtender");
-      } else {
-        setOpen(true);
-      }
-    });
+    if (window.userVerified === "Yes") {
+      axios({
+        url: "http://localhost:6969/register",
+        method: "POST",
+        data: credentials,
+      }).then((res) => {
+        // console.log(res);
+        if (res.data.status === "success") {
+          navigate("/vendor/uploadtender");
+        } else {
+          setOpen(true);
+        }
+      });
+    } else {
+      setOpen6(true);
+    }
   };
 
   const [values, setValues] = React.useState(initialValues);
@@ -83,41 +84,65 @@ const VendorSignup = () => {
     }
   };
 
-  const verifyOTP = () => {
-    // setOpen2(true); 
-    // setOpen3(true);
-  }
-
-  const sendOTP = () => {
-    // Send OTP
-    // console.log("Send OTP to ", values.phone);
-
-    const newOtp = generateOTP(1000, 9999)
-    
-    const options = {
-      method: 'POST',
-      url: 'https://d7-verify.p.rapidapi.com/send',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: 'Token 737589cdce3e1c8cfc8ba469734a20d9d2e97cef',
-        'X-RapidAPI-Key': '898adc9212mshd2ea663180dff70p15ad45jsne54c45c2120d',
-        'X-RapidAPI-Host': 'd7-verify.p.rapidapi.com'
-      },
-      data: '{"expiry":900,"message":"Your otp code is {newOtp}","mobile":{values.phone},"sender_id":"SMSInfo"}'
-    };
-    
-    axios.request(options).then(function (response) {
-      console.log(response.data);
-    }).catch(function (error) {
-      console.error(error);
-    });
-
+  const configureCaptcha = () => {
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "sendOtpBtn",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log("Recaptcha varified");
+        },
+        defaultCountry: "IN",
+      }
+    );
   };
 
-  // -----Opening and Closing snackbar-----
+  const verifyOTP = () => {
+    let code = values["otp"];
+    window.result
+      .confirm(code)
+      .then(() => {
+        window.userVerified = "Yes";
+        setOpen2(true);
+        console.log("OTP Verified");
+      })
+      .catch((error) => {
+        setOpen3(true);
+        console.log(error);
+      });
+  };
+
+  const sendOTP = () => {
+    if (values.phone.toString() === "" || values.phone.toString().length < 10)
+      return;
+    let phoneNumber = "+91" + values.phone.toString();
+
+    configureCaptcha();
+    const appVerifier = window.recaptchaVerifier;
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then((result) => {
+        window.result = result;
+        setOpen4(true);
+        console.log("OTP has been sent");
+      })
+      .catch((error) => {
+        setOpen5(true);
+        console.log("SMS not sent");
+        window.location.reload();
+      });
+  };
+
+  // -----Opening and Closing snackbars-----
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
+  const [open4, setOpen4] = React.useState(false);
+  const [open5, setOpen5] = React.useState(false);
+  const [open6, setOpen6] = React.useState(false);
+
+  // ---------------------------------------
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -125,6 +150,10 @@ const VendorSignup = () => {
     }
     setOpen(false);
     setOpen2(false);
+    setOpen3(false);
+    setOpen4(false);
+    setOpen5(false);
+    setOpen6(false);
   };
 
   return (
@@ -193,10 +222,18 @@ const VendorSignup = () => {
               value={values.phone}
               onChange={handleInputChange}
             />
-
-            <Button xs="true" variant="outlined" onClick={sendOTP}>
+            <div id="recaptcha-container"></div>
+            <Button
+              xs="true"
+              variant="outlined"
+              id="sendOtpBtn"
+              onClick={() => {
+                sendOTP();
+              }}
+            >
               Send OTP
             </Button>
+
             <TextField
               xs="true"
               margin="normal"
@@ -207,9 +244,9 @@ const VendorSignup = () => {
               value={values.otp}
               onChange={handleInputChange}
             />
-            {/* <Button xs="true" variant="outlined" onClick={verifyOTP}>
+            <Button xs="true" variant="outlined" onClick={verifyOTP}>
               Verify
-            </Button> */}
+            </Button>
 
             <TextField
               margin="normal"
@@ -254,6 +291,21 @@ const VendorSignup = () => {
       <Snackbar open={open3} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           OTP Invalid
+        </Alert>
+      </Snackbar>
+      <Snackbar open={open4} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          OTP sent successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar open={open5} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          OTP not sent
+        </Alert>
+      </Snackbar>
+      <Snackbar open={open6} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Phone Not Verified
         </Alert>
       </Snackbar>
     </ThemeProvider>
