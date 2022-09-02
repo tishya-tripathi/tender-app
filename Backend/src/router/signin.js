@@ -195,7 +195,7 @@ module.exports = function (app, db) {
                         isLogged: true,
                         lastUpdated: req.session.lastUpdated,
                         isLatest: false,
-                        isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "vendor")) ? true : false,
+                        // isAdmin: ((req.session.admin === true) || (req.session.admin === false)) ? true : false,
                         errorLatest: error,
                         // keys: req.session.keys,
                         profile: req.session.profile,
@@ -208,7 +208,7 @@ module.exports = function (app, db) {
                         lastUpdated: new Date(),
                         isLatest: true,
                         isLogged: true,
-                        isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "mentor")) ? true : false,
+                        // isAdmin: ((req.session.admin === "admin") || (req.session.accountType === "mentor")) ? true : false,
                         // profile: result.profile,
                     })
                 }
