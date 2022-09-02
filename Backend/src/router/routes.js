@@ -1,5 +1,9 @@
 // const dbConnect=require('./mongodb');
 const multer = require('multer');
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
+
 module.exports = function (app, db) {
     // dummy route
     // =================admin Api===================
@@ -264,6 +268,7 @@ module.exports = function (app, db) {
         else if (
             size != 0 &&
             k.tenderName &&
+            k.email &&
             k.tenderValue
 
         ) {
@@ -283,7 +288,10 @@ module.exports = function (app, db) {
                     else {
                         let obj = {
                             tenderName: k.tenderName,
+                            email: k.email,
                             profile: {
+                                tenderName: k.tenderName,
+                                email: k.email,
                                 file: req.file,
                                 tenderValue: k.tenderVaue,
                             },
@@ -464,59 +472,60 @@ module.exports = function (app, db) {
     });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
-    // app.get("/vender_files", (req, res) => {
-    //     let k = req.body;
-    //     console.log(req.body);
-    //     // Check if already logged in ?
-    //     if (req.session && req.session.userid) {
-    //         res.json({
-    //             status: "warn",
-    //             message: "Session already exists !",
-    //             isLogged: true,
-    //             lastUpdated: req.session.lastUpdated,
-    //             isLatest: false,
-    //             // keys: req.session.keys,
-    //             profile: req.session.profile,
-    //         });
-    //     }
-    //     // check if any value is not null
-    //     else  if(k.url){
-    //         // check if record already exists...
-    //         db.collection("members").findOne(
-                // { email: k.email },
-                // { projection: { _id: 1, email: 1 } },
-                // (error, result) => {
-                //     if (result && result._id) {
-                //         res.json({
-                //             status: "Sucess",
-                //             message: "File exists !",
-                //             isLogged: false,
-                //         });
-                //     }
-                //     // tenderName doesn't exists, create one
-                //     else {
-                //         res.json({
-                //             status: "error",
-                //             message: "Empty or invalid file url",
-                //             isLogged: false,
-    //                     });
-    //                 }
-    //             }
-    //         );
-    //     } else {
-    //         // some fields are null
-    //         res.json({
-    //             status: "error",
-    //             message: "Empty or invalid data",
-    //             isLogged: false,
-    //         });
-    //     }
-    // });
+    // api to downaload files 
+
+    function downloadFile(url,callback) {
+        // console.log("file is here.........");
+        const fname = path.basename(url);
+        const req = https.get(url, function (res) {
+            const fileStream = fs.createWriteStream("./photos/"+fname);
+            res.pipe(fileStream);
+            fileStream.on("error", function (err) {
+                console.log("Error writing to the stream");
+                console.log(err);
+            });
+            fileStream.on("close",function(){
+                callback(fname);
+            });
+
+            fileStream.on("finish", function () {
+                fileStream.close(callback);
+                console.log("Done");
+
+            });
+        });
+        req.on("error", function (err) {
+            console.log("Error downloding file");
+            console.log(err);
+
+        });
+    }
+    app.get("/download", (req, res) => {
+        console.log(req.body.url);
+        let k = req.body;
+        if(k.url){
+            downloadFile(k.url,function(url){
+                console.log(k.url+"downloaded successfully");
+            });
+            res.json({
+                status: "Sucess",
+                message: "File downloaded successfully",
+                isLogged: true,
+            });
+        }
+        else {
+            res.json({
+                status: "error",
+                message: "Empty or invalid url",
+                isLogged: false,
+            });
+        }
+    });
+    // ======================================================================*******************************================================
     // =======================================================================*******************************================================
-    // =======================================================================*******************************================================
-    app.delete("/delete_vender",(req,res)=>{
+    app.delete("/delete_vender", (req, res) => {
         console.log(req.body.email);
-        let k=req.body;
+        let k = req.body;
         db.collection("members").findOne(
             { email: k.email },
             { projection: { _id: 1, email: 1 } },
@@ -525,10 +534,10 @@ module.exports = function (app, db) {
                     // res.json({
                     //     result
                     // });
-                    const resu = db.collection("members").deleteOne({email:k.email});
+                    const resu = db.collection("members").deleteOne({ email: k.email });
                     res.send(resu);
                 }
-                else{
+                else {
                     // console.log(results);
                     // res.json(results);
                     res.json({

@@ -86,7 +86,7 @@ module.exports = function (app, db) {
     app.post("/vendors_signin", (req, res) => {
         console.log("hello from signin from vendors");
         let k = req.body
-        let temp = k.email && k.password && k.admin === "false";
+        let temp = k.email && k.password && k.admin === false;
         console.log(temp);
         // console.log(k);
         // Check if session already exists ?
@@ -101,7 +101,7 @@ module.exports = function (app, db) {
             })
         }
         // check if values aren't null
-        else if (k.email && k.password && k.admin==="false") {
+        else if (k.email && k.password && k.admin===false) {
             console.log("After login ");
             console.log(k);
             // Fetch fields matching Email and pass
@@ -195,7 +195,7 @@ module.exports = function (app, db) {
                         isLogged: true,
                         lastUpdated: req.session.lastUpdated,
                         isLatest: false,
-                        isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "vendor")) ? true : false,
+                        // isAdmin: ((req.session.admin === true) || (req.session.admin === false)) ? true : false,
                         errorLatest: error,
                         // keys: req.session.keys,
                         profile: req.session.profile,
@@ -208,7 +208,7 @@ module.exports = function (app, db) {
                         lastUpdated: new Date(),
                         isLatest: true,
                         isLogged: true,
-                        isAdmin: ((req.session.accountType === "admin") || (req.session.accountType === "mentor")) ? true : false,
+                        // isAdmin: ((req.session.admin === "admin") || (req.session.accountType === "mentor")) ? true : false,
                         // profile: result.profile,
                     })
                 }
