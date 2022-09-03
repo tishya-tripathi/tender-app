@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,25 +14,45 @@ import VendorCardComponent from "./VendorCardComponent";
 
 
 
-const data = [
-  {
-    tenderName: "Tender Name 01"
-  },
-  {
-    tenderName: "Tender Name 02"
-  },
-  {
-    tenderName: "Tender Name 03"
-  }
-];
-
-
-
 const VendorUploadTender = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    axios({
+      url: "http://localhost:6969/all_admin_data",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      let temp_data = [];
+      for(let i=0;i<res.data.length;i++){
+        const obj = {
+          tenderName: res.data[i].tenderName,
+          startDate: res.data[i].profile.startDate,
+          endDate: res.data[i].profile.endDate,
+        }
+        temp_data.push(obj);
+      }
+      setData(temp_data);
+    });
+  },[]);
+
   const logout = () => {
+    axios({
+      url: "http://localhost:6969/logout",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true
+    }).then((res) => {
+      console.log(res);
+      if(res.data.isLogged === false){
+        return;
+      } else {}
+    });
     navigate("/");  
   }
 

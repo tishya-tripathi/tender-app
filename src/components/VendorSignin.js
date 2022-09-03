@@ -15,6 +15,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { Tune } from "@mui/icons-material";
 
 const initialValues = {
   email: "",
@@ -30,6 +31,15 @@ const theme = createTheme();
 
 const VendorSignin = () => {
   const navigate = useNavigate();
+
+  axios({
+    url: "http://localhost:6969/logout",
+    method: "GET",
+    withCredentials: true,
+    crossDomain: true
+  }).then((res) => {
+    console.log(res);
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,6 +58,8 @@ const VendorSignin = () => {
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
       method: "POST",
+      withCredentials: true,
+      crossDomain: true,
       data: credentials,
     }).then((res) => {
       // console.log(res);

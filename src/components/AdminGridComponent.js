@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,52 +14,51 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import { useNavigate } from "react-router-dom";
 
-
-
-
-
 const AdminGridComponent = () => {
+  const tenderName = window.sessionStorage.getItem("tenderName");
 
-  const tenderName = window.sessionStorage.getItem('tenderName')
-  
   const navigate = useNavigate();
 
   const logout = () => {
+    axios({
+      url: "http://localhost:6969/logout",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+    });
     navigate("/");
   };
 
+  const [rows, setRows] = React.useState([]);
 
-
-  const rows = [
-    {
-      id: 1,
-      vendorName: "Vendor 1",
-      orgName: "Organization 1",
-      phone: 9989998975,
-      tenderValue: 1500000,
-    },
-    {
-      id: 2,
-      vendorName: "Vendor 2 ",
-      orgName: "Organization 2",
-      phone: 9989998975,
-      tenderValue: 750000,
-    },
-    {
-      id: 3,
-      vendorName: "Vendor 3",
-      orgName: "Organization 3",
-      phone: 9989998975,
-      tenderValue: 6650000,
-    },
-    {
-      id: 4,
-      vendorName: "Vendor 4",
-      orgName: "Organization 4",
-      phone: 9989998975,
-      tenderValue: 4000,
-    },
-  ];
+  React.useEffect(()=>{
+    axios({
+      url: "http://localhost:6969/all_data",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      const data = [];
+      for (var i = 0; i < res.data.length; i++) {
+        if (res.data[i].tenderName === tenderName && res.data[i].stud.length !== 0) {
+          var obj = {
+            id: i + 1,
+            vendorName: res.data[i].stud[0].profile.name,
+            orgName: res.data[i].stud[0].profile.organization,
+            phone: res.data[i].stud[0].profile.phoneno,
+            tenderValue: res.data[i].profile.tenderValue,
+            url: res.data[i].profile.file.path
+          };
+          data.push(obj);
+        }
+      }
+      setRows(data);
+      console.log(rows);
+    });
+  }, [])
 
   const columns = [
     {
@@ -108,8 +108,18 @@ const AdminGridComponent = () => {
                   "Button clicked by :",
                   params.row.vendorName,
                   params.row.orgName,
+                  params.row.url,
                   tenderName
                 );
+                axios({
+                    url: "http://localhost:6969/download",
+                    method: "GET",
+                    path_url: params.row.url,
+                    withCredentials: true,
+                    crossDomain: true,
+                  }).then((res) => {
+                    console.log(res);
+                  });
               }}
             >
               <DownloadRoundedIcon />
@@ -119,8 +129,6 @@ const AdminGridComponent = () => {
       },
     },
   ];
-
-
 
   return (
     <>

@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -19,54 +20,61 @@ import FormControl from "@mui/material/FormControl";
 import { useNavigate } from "react-router-dom";
 import AdminGridComponent from "./AdminGridComponent";
 
-
-
-const tenders = [
-  {
-    tenderName: "Tender 01"
-  },
-  {
-    tenderName: "Tender 02"
-  },
-  {
-    tenderName: "Tender 03"
-  },
-  {
-    tenderName: "Tender 04"
-  }
-];
-
-
-
-
 const AdminViewTender = () => {
-
   const navigate = useNavigate();
-
+  const [tenders, setTenders] = React.useState([]);
+  const [tenderDropdown, setTenderDropDown] = React.useState([]);
   const logout = () => {
+    axios({
+      url: "http://localhost:6969/logout",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      if (res.data.isLogged === false) {
+        return;
+      } else {
+      }
+    });
     navigate("/");
   };
 
-  // Dropdown Menu
-  const tenderDropdown =
-    tenders.length > 0 &&
-    tenders.map((item, index) => {
-      return (
-        <MenuItem key={index} value={item.tenderName}>
-          {item.tenderName}
-        </MenuItem>
-      );
+  React.useEffect(() => {
+    axios({
+      url: "http://localhost:6969/all_data",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      const data = [];
+      for (var i = 0; i < res.data.length; i++) {
+        var obj = {
+          tenderName: res.data[i].tenderName,
+        };
+        data.push(obj);
+      }
+      setTenders(data);
+      // Dropdown Menu
+      const temp_data =
+        tenders.length > 0 &&
+        tenders.map((item, index) => {
+          return (
+            <MenuItem key={index} value={item.tenderName}>
+              {item.tenderName}
+            </MenuItem>
+          );
+        });
+      setTenderDropDown(temp_data);
     });
-
-
+  }, []);
 
   // Redirect and Display Tender
   const displayTender = (e) => {
-    
     const { name, value } = e.target;
     //console.log("Display Tender : ", value);
 
-    window.sessionStorage.setItem('tenderName', value);
+    window.sessionStorage.setItem("tenderName", value);
 
     navigate("./tender");
   };
@@ -118,7 +126,6 @@ const AdminViewTender = () => {
                 </Select>
               </FormControl>
             </Grid>
-
           </Grid>
         </Container>
       </Box>

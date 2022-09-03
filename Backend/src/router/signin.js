@@ -211,7 +211,7 @@ module.exports = function (app, db) {
                         isLatest: true,
                         isLogged: true,
                         // isAdmin: ((req.session.admin === "admin") || (req.session.accountType === "mentor")) ? true : false,
-                        // profile: result.profile,
+                        profile: result.profile,
                     })
                 }
             })

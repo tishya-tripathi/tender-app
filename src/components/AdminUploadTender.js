@@ -23,30 +23,12 @@ import { NavigateBefore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import AdminCardComponent from "./AdminCardComponent";
 
-const data = [
-  {
-    tenderName: "Tender Name 1",
-    startDate: "22/09/2022",
-    endDate: "30/09/2022",
-  },
-  {
-    tenderName: "Tender Name 2",
-    startDate: "22/09/2022",
-    endDate: "30/09/2022",
-  },
-  {
-    tenderName: "Tender Name 3",
-    startDate: "22/09/2022",
-    endDate: "30/09/2022",
-  },
-];
-
 const AdminUploadTender = () => {
   const theme = useTheme();
   const formatDate = (param) => {
     var x = new Date(param);
     var date = ("0" + x.getDate().toString()).slice(-2);
-    var month = ("0" + x.getMonth().toString()).slice(-2);
+    var month = ("0" + (x.getMonth()+1).toString()).slice(-2);
     var year = x.getFullYear().toString();
     return month + "/" + date + "/" + year;
   };
@@ -54,33 +36,71 @@ const AdminUploadTender = () => {
 
   // a local state to store the currently selected file.
   const [selectedFile, setSelectedFile] = React.useState(null);
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    axios({
+      url: "http://localhost:6969/all_admin_data",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      let temp_data = [];
+      for(let i=0;i<res.data.length;i++){
+        const obj = {
+          tenderName: res.data[i].tenderName,
+          startDate: res.data[i].profile.startDate,
+          endDate: res.data[i].profile.endDate,
+        }
+        temp_data.push(obj);
+      }
+      setData(temp_data);
+    });
+  },[]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    formData.append("file", selectedFile)
-    const newTender = {
-      // File Upload
-      tenderName: formData.get("tenderName"),
-      startDate: formatDate(startDate),
-      endDate: formatDate(endDate),
-      admin: true,
-      file_upload: formData.get("file")
-    };
-    console.log(newTender);
+    let check = 1;
+    axios({
+      url: "http://localhost:6969/status",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      if (res.data.isLogged === false) {
+        check = 0;
+      } else {
+        check = 1;
+      }
+    });
+    if (check === 1) {
+      const formData = new FormData(event.currentTarget);
+      formData.append("file", selectedFile);
+      const newTender = {
+        // File Upload
+        tenderName: formData.get("tenderName"),
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+        admin: true,
+        file_upload: formData.get("file"),
+      };
+      console.log(newTender);
 
-    // AXIOS Connection - TODO
-    try {
-      const response = axios({
-        method: "post",
-        withCredentials:true,
-        crossDomain:true,
-        url: "http://localhost:6969/upload_vender_admin",
-        data: newTender,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-    } catch(error) {
-      console.log(error)
+      // AXIOS Connection - TODO
+      try {
+        const response = await axios({
+          method: "post",
+          url: "http://localhost:6969/upload_vender_admin",
+          data: newTender,
+          headers: { "Content-Type": "multipart/form-data" },
+        }).then((res)=>{
+          window.location.reload();
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -109,6 +129,18 @@ const AdminUploadTender = () => {
   };
 
   const logout = () => {
+    axios({
+      url: "http://localhost:6969/logout",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      if (res.data.isLogged === false) {
+        return;
+      } else {
+      }
+    });
     navigate("/");
   };
 
