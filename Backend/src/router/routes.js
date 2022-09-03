@@ -554,17 +554,8 @@ module.exports = function (app, db) {
     // combined data of files and members
     app.get("/all_data", (req, res) => {
         console.log("insides");
-        db.collection("members")
+        db.collection("tender_files")
             .aggregate([
-                {
-                    $lookup: {
-                        from: "files",
-                        localField: "email",
-                        foreignField: "email",
-                        as: "comp",
-                    },
-
-                },
                 {
                     $lookup: {
                         from: "members",
