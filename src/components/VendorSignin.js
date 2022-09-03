@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -12,11 +13,18 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const initialValues = {
   email: "",
   password: "",
 };
+
+// Used for snackbar Alert
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const theme = createTheme();
 
@@ -26,12 +34,29 @@ const VendorSignin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const credentials = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+      admin: false,
+    };
 
-    navigate("/vendor/uploadtender");
+    axios({
+      url: "http://localhost:6969/vendors_signin",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+      method: "POST",
+      data: credentials,
+    }).then((res) => {
+      // console.log(res);
+      if (res.data.status === "success") {
+        navigate("/vendor/uploadtender");
+      } else {
+        setOpen(true);
+      }
+    });
   };
 
   const [values, setValues] = React.useState(initialValues);
@@ -51,6 +76,19 @@ const VendorSignin = () => {
     }
   };
 
+  // -----Opening and Closing snackbar-----
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,6 +174,11 @@ const VendorSignin = () => {
           </Box>
         </Box>
       </Container>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Invalid username or password
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 };

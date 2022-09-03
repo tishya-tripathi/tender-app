@@ -8,6 +8,7 @@ import AdminHome from "./components/AdminHome";
 import AdminUploadTender from "./components/AdminUploadTender";
 import AdminViewTender from "./components/AdminViewTender";
 import VendorUploadTender from "./components/VendorUploadTender";
+import AdminGridComponent from "./components/AdminGridComponent";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/admin/home" exact element={<AdminHome />} />
           <Route path="/admin/uploadtender" exact element={<AdminUploadTender />} />
           <Route path="/admin/viewtender" exact element={<AdminViewTender />} />
+          <Route path="/admin/viewtender/tender" exact element={<AdminGridComponent />} />
 
 
           <Route path="/vendor/uploadtender" exact element={<VendorUploadTender />} />
