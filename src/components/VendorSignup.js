@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { firebase, auth } from "../firebase";
+import { firebase,auth } from "../firebase";
 // import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 const initialValues = {
