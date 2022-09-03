@@ -71,8 +71,10 @@ const AdminUploadTender = () => {
 
     // AXIOS Connection - TODO
     try {
-      const response = await axios({
+      const response = axios({
         method: "post",
+        withCredentials:true,
+        crossDomain:true,
         url: "http://localhost:6969/upload_vender_admin",
         data: newTender,
         headers: { "Content-Type": "multipart/form-data" },

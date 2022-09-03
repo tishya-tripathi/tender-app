@@ -44,7 +44,7 @@ module.exports = function (app, db) {
                     // log in by saving to session
                     req.session.userid = k.email
                     req.session.profile = result.profile
-                    req.session.accountType = result.profile.accountType
+                    req.session.admin = result.profile.admin
                     req.session.lastUpdated = new Date()
                     // return details
                     res.json({

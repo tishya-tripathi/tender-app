@@ -65,6 +65,7 @@ module.exports = function (app, db) {
             size = 1;
         // Check if already logged in ?
         if (req.session && req.session.userid) {
+            console.log(req.session);
             res.json({
                 status: "warn",
                 message: "Session already exists !",
