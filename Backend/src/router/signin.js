@@ -179,6 +179,8 @@ module.exports = function (app, db) {
     // must check on first page visit
     app.get("/status", (req, res) => {
         // already logged in, redirect user to their profile
+        // console.log(req.session)
+
         if (req.session && req.session.userid) {
             console.log(req.session)
             // let q = (req.session.admin === true) ? "members" :false;

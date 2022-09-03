@@ -1,10 +1,17 @@
 const { MongoClient } = require('mongodb');
+const mongoose =require('mongoose');
 
-const url = "mongodb://localhost:27017/placement"
+// const url =  "mongodb + srv://root:root@cluster0.bmlqp.mongodb.net/?retryWrites=true&w=majority"
+const url = process.env.MONGODB_URL || "mongodb://localhost:27017/placement"
 // const url = "mongodb://localhost:27017/<name_the_cluster>"
 
 let flag = false
 let dbo
+
+// const client = new MongoClient(url, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// });
 
 module.exports = {
     connect: (callback) => {
