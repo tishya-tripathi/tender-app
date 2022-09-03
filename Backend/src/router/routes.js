@@ -275,8 +275,8 @@ module.exports = function (app, db) {
         ) {
             // check if record already exists...
             db.collection("tender_files").findOne(
-                { tenderName: k.tenderName },
-                { projection: { _id: 1, tenderName: 1 } },
+                { email: k.email },
+                { projection: { _id: 1, email: 1 } },
                 (error, result) => {
                     if (result && result._id) {
                         res.json({
@@ -474,40 +474,73 @@ module.exports = function (app, db) {
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     // api to downaload files 
+    // const fs = require("fs");
+   
 
-    function downloadFile(url,callback) {
-        // console.log("file is here.........");
-        const fname = path.basename(url);
-        const req = https.get(url, function (res) {
-            const fileStream = fs.createWriteStream("./photos/"+fname);
-            res.pipe(fileStream);
-            fileStream.on("error", function (err) {
-                console.log("Error writing to the stream");
-                console.log(err);
-            });
-            fileStream.on("close",function(){
-                callback(fname);
-            });
+    // function downloadFile(url,callback) {
+    //     // console.log("file is here.........");
+    //     const fname = path.basename(url);
+    //     const req = https.get(url, function (res) {
+    //         const fileStream = fs.createWriteStream("./photos/"+fname);
+    //         res.pipe(fileStream);
+    //         fileStream.on("error", function (err) {
+    //             console.log("Error writing to the stream");
+    //             console.log(err);
+    //         });
+    //         fileStream.on("close",function(){
+    //             callback(fname);
+    //         });
 
-            fileStream.on("finish", function () {
-                fileStream.close(callback);
-                console.log("Done");
+    //         fileStream.on("finish", function () {
+    //             fileStream.close(callback);
+    //             console.log("Done");
 
-            });
+    //         });
+    //     });
+    //     req.on("error", function (err) {
+    //         console.log("Error downloding file");
+    //         console.log(err);
+
+    //     });
+    // }
+    // const request = require("request-promise-native");
+
+    const log = console.log;
+    const path = require("path");
+    const { exit } = require("process");
+    const request = require("request-promise-native");
+    // 2. custom download folder
+    const folder = path.resolve(__dirname, '../pdf/');
+    // log('folder', folder);
+
+    // 3. check if the folder exists, if not create it
+    if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder);
+    }
+
+    async function downloadFile(url, filename) {
+        log('🚧 pdf downloading ...');
+        const pdfBuffer = await request.get({
+            uri: url,
+            encoding: null,
         });
-        req.on("error", function (err) {
-            console.log("Error downloding file");
-            console.log(err);
-
-        });
+        // 4. write file to local file system
+        fs.writeFileSync(filename, pdfBuffer);
+        log('✅ pdf download finished!');
+        // 5. exit the terminal after download finished
+        exit(0);
     }
     app.get("/download", (req, res) => {
         console.log(req.body.url);
         let k = req.body;
-        if(k.url){
-            downloadFile(k.url,function(url){
-                console.log(k.url+"downloaded successfully");
-            });
+        // let link = folder + '/cs193p-2021-l1.pdf';
+        // downloadFile(k.url,link);
+        if (k.url) {
+            const fname = path.basename(k.url);
+            let link = folder+"/" + fname;
+            downloadFile(k.url, link);
+            console.log(k.url + "downloaded successfully");
+
             res.json({
                 status: "Sucess",
                 message: "File downloaded successfully",
@@ -551,6 +584,36 @@ module.exports = function (app, db) {
     });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
+    app.delete("/delete_tender", (req, res) => {
+        // console.log(req.body.email);
+        let k = req.body;
+        console.log(k.tenderName);
+        db.collection("tender_files").findOne(
+            { tenderName: k.tenderName },
+            { projection: { _id: 1, tenderName: 1 } },
+            (error, result) => {
+                if (result && result._id) {
+                    // res.json({
+                    //     result
+                    // });
+                    const resu = db.collection("tender_files").deleteMany({ tenderName: k.tenderName });
+                    // res.send(resu);
+                    console.log(resu);
+                    res.send(resu);
+                }
+                else {
+                    // console.log(results);
+                    // res.json(results);
+                    res.json({
+                        status: "error",
+                        message: "Empty or invalid email",
+                        isLogged: false,
+                    });
+                }
+            });
+    });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
     // combined data of files and members
     app.get("/all_data", (req, res) => {
         console.log("insides");
@@ -572,6 +635,29 @@ module.exports = function (app, db) {
                 res.json(results);
             });
     });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
+    app.get("/all_data", (req, res) => {
+        console.log("insides");
+        db.collection("files")
+            .aggregate([
+                {
+                    $lookup: {
+                        from: "members",
+                        localField: "email",
+                        foreignField: "email",
+                        as: "stud",
+                    },
+                },
+            ])
+            .toArray((error, results) => {
+                if (error) {
+                    res.json({ error });
+                }
+                res.json(results);
+            });
+    });
+    // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     // post route for register (expects json data)
     // to register all members

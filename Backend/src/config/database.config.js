@@ -1,9 +1,9 @@
 const { MongoClient } = require('mongodb');
 const mongoose =require('mongoose');
 
-// const url =  "mongodb + srv://root:root@cluster0.bmlqp.mongodb.net/?retryWrites=true&w=majority"
-const url = process.env.MONGODB_URL || "mongodb://localhost:27017/placement"
-// const url = "mongodb://localhost:27017/<name_the_cluster>"
+const url =  'mongodb+srv://tender:tender@cluster0.mesqitc.mongodb.net/Vendors?retryWrites=true&w=majority'
+// const url = process.env.MONGODB_URL || "mongodb://localhost:27017/placement"
+// const url = 'mongodb://localhost:27017/<name_the_cluster>'
 
 let flag = false
 let dbo
@@ -12,6 +12,15 @@ let dbo
 //     useNewUrlParser: true,
 //     useUnifiedTopology: true,
 // });
+
+// mongoose.connect(url,{
+//     useNewUrlParser:true,
+//     useCreateIndex:true,
+//     useUnifiedTopology:true,
+//     useFindAndModify:false
+// }).then(()=>{
+//     console.log(`connection successful`);
+// }).catch((err)=>console.log(`No Connection`));
 
 module.exports = {
     connect: (callback) => {
