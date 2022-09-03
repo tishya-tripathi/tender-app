@@ -464,6 +464,9 @@ module.exports = function (app, db) {
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     // api to downaload files 
+    // const fs = require("fs");
+   
+
 
     const log = console.log;
     const path = require("path");
@@ -500,6 +503,7 @@ module.exports = function (app, db) {
             let link = folder+"/" + fname;
             downloadFile(k.path_url, link);
             console.log(k.path_url + "downloaded successfully");
+
 
             res.json({
                 status: "Sucess",
@@ -570,6 +574,36 @@ module.exports = function (app, db) {
     });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
+    app.delete("/delete_tender", (req, res) => {
+        // console.log(req.body.email);
+        let k = req.body;
+        console.log(k.tenderName);
+        db.collection("tender_files").findOne(
+            { tenderName: k.tenderName },
+            { projection: { _id: 1, tenderName: 1 } },
+            (error, result) => {
+                if (result && result._id) {
+                    // res.json({
+                    //     result
+                    // });
+                    const resu = db.collection("tender_files").deleteMany({ tenderName: k.tenderName });
+                    // res.send(resu);
+                    console.log(resu);
+                    res.send(resu);
+                }
+                else {
+                    // console.log(results);
+                    // res.json(results);
+                    res.json({
+                        status: "error",
+                        message: "Empty or invalid email",
+                        isLogged: false,
+                    });
+                }
+            });
+    });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
     // combined data of files and members
     app.get("/all_data", (req, res) => {
         console.log("insides");
@@ -613,6 +647,29 @@ module.exports = function (app, db) {
                 res.json(results);
             });
     });
+    // =======================================================================*******************************================================
+    // =======================================================================*******************************================================
+    app.get("/all_data", (req, res) => {
+        console.log("insides");
+        db.collection("files")
+            .aggregate([
+                {
+                    $lookup: {
+                        from: "members",
+                        localField: "email",
+                        foreignField: "email",
+                        as: "stud",
+                    },
+                },
+            ])
+            .toArray((error, results) => {
+                if (error) {
+                    res.json({ error });
+                }
+                res.json(results);
+            });
+    });
+    // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     // post route for register (expects json data)
     // to register all members

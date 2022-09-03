@@ -12,6 +12,7 @@ const multer = require("multer");
 // creating of express app
 const app = express();
 
+
 var cors = require("cors");
 const corsOptions = {
   origin: "http://localhost:3000",
