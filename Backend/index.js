@@ -35,16 +35,20 @@ app.use(
   })
 );
 // enabling CROS
+
+let origins = ["http://localhost:3000"]
+if (process.env.NODE_ENV === "development") origins.push("http://localhost:3069", "http://localhost:3000")
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); //"http://localhost:3069" // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Methods", "GET,POST");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
+    if (origins.includes(req.headers.origin)) {
+        res.header("Access-Control-Allow-Origin", req.headers.origin) // restrict it to the required domain
+    }
+    // res.header("Access-Control-Allow-Origin", origins) // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Methods", "GET,POST")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    res.header("Access-Control-Allow-Credentials", "true")
+    next()
+})
+
 // use body parser to decode query params and json body.
 app.use(
   bodyParser.urlencoded({
