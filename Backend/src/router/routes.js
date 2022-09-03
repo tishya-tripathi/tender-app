@@ -524,18 +524,18 @@ module.exports = function (app, db) {
     });
     // ======================================================================*******************************================================
     // =======================================================================*******************************================================
-    app.delete("/delete_vender", (req, res) => {
-        console.log(req.body.email);
+    app.delete("/delete_file", (req, res) => {
+        // console.log(req.body.email);
         let k = req.body;
-        db.collection("members").findOne(
-            { email: k.email },
-            { projection: { _id: 1, email: 1 } },
+        db.collection("files").findOne(
+            { tenderName: k.tenderName },
+            { projection: { _id: 1, tenderName: 1 } },
             (error, result) => {
                 if (result && result._id) {
                     // res.json({
                     //     result
                     // });
-                    const resu = db.collection("members").deleteOne({ email: k.email });
+                    const resu = db.collection("files").deleteOne({ tenderName: k.tenderName });
                     res.send(resu);
                 }
                 else {
