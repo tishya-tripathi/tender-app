@@ -30,11 +30,32 @@ const theme = createTheme();
 const AdminSignin = () => {
   const navigate = useNavigate();
 
+  axios({
+    url: "http://localhost:6969/logout",
+    method: "GET",
+    withCredentials: true,
+    crossDomain: true
+  }).then((res) => {
+    console.log(res);
+  });
+
+  axios({
+    url: "http://localhost:6969/status",
+    method: "GET",
+    withCredentials: true,
+    crossDomain: true,
+  }).then((res) => {
+    console.log(res);
+    if (res.data.isLogged === true) {
+      navigate("/admin/home");
+    }
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const credentials = {
+    const credential = {
       email: data.get("email"),
       password: data.get("password"),
       admin: true,
@@ -43,7 +64,9 @@ const AdminSignin = () => {
     axios({
       url: "http://localhost:6969/signin",
       method: "POST",
-      data: credentials,
+      data: credential,
+      withCredentials: true,
+      crossDomain: true
     }).then((res) => {
       // console.log(res);
       if (res.data.status === "success") {

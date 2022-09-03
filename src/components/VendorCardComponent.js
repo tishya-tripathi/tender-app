@@ -12,54 +12,70 @@ import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 
 const VendorCardComponent = ({ data }) => {
   const [selectedFile, setSelectedFile] = React.useState(null);
+  let email, check=1;
+  try {
+    axios({
+      url: "http://localhost:6969/status",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      if (res.data.isLogged === false) {
+        check = 0;
+      } else {
+        check = 1;
+        email = res.data.profile.email;
+        console.log(res.data.profile.email);
+      }
+    });
+  } catch(err){}
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    
-    console.log("Tender Name : ", event.target.querySelector("h5").innerText);
-    console.log("Tender Value : ", event.target.tenderValue.value);
+    if (check === 1) {
+      console.log("Tender Name : ", event.target.querySelector("h5").innerText);
+      console.log("Tender Value : ", event.target.tenderValue.value);
 
-    const formData = new FormData(event.currentTarget);
-    formData.append("file", selectedFile)
-    const newTender = {
-      // File Upload
-      tenderName: event.target.querySelector("h5").innerText,
-      tenderValue: event.target.tenderValue.value,
-      admin: false,
-      tender_file: formData.get("file")
-    };
-    console.log(newTender);
-      
-    // AXIOS Connection - TODO
-    try {
-      const response = await axios({
-        method: "post",
-        url: "http://localhost:6969/upload_tender_file",
-        data: newTender,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-    } catch(error) {
-      console.log(error)
+      const formData = new FormData(event.currentTarget);
+      formData.append("file", selectedFile);
+      const newTender = {
+        // File Upload
+        tenderName: event.target.querySelector("h5").innerText,
+        tenderValue: event.target.tenderValue.value,
+        email: email,
+        tender_file: formData.get("file"),
+      };
+      console.log(newTender);
+
+      // AXIOS Connection - TODO
+      try {
+        const response = await axios({
+          method: "post",
+          url: "http://localhost:6969/upload_tender_file",
+          data: newTender,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
-    };
-    
+  };
 
-    // Download Admin Tender File
-    const downloadFile = async (name) => {
-        console.log("Download File : ", name);
-    };
+  // Download Admin Tender File
+  const downloadFile = async (name) => {
+    console.log("Download File : ", name);
+  };
 
+  // Upload Vendor Tender File
+  const uploadFile = async (name) => {
+    console.log("Upload File : ", name);
+  };
 
-    // Upload Vendor Tender File
-    const uploadFile = async (name) => {
-        console.log("Upload File : ", name);
-    };  
-
-    const handleFileSelect = (event) => {
-      setSelectedFile(event.target.files[0])
-    }
-    
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
   return (
     <>
@@ -101,7 +117,9 @@ const VendorCardComponent = ({ data }) => {
                       startIcon={<DownloadRoundedIcon />}
                       variant="contained"
                       sx={{ width: "15vw" }}
-                      onClick={() => {downloadFile(data.tenderName)}}
+                      onClick={() => {
+                        downloadFile(data.tenderName);
+                      }}
                     >
                       Download File
                     </Button>
@@ -111,7 +129,9 @@ const VendorCardComponent = ({ data }) => {
                       startIcon={<FileUploadRoundedIcon />}
                       variant="contained"
                       sx={{ width: "15vw" }}
-                      onChange={() => {uploadFile(data.tenderName)}}
+                      onChange={() => {
+                        uploadFile(data.tenderName);
+                      }}
                     >
                       Upload File
                       <input type="file" onChange={handleFileSelect} hidden />

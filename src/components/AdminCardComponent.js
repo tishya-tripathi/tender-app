@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -22,10 +23,16 @@ import { NavigateBefore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const AdminCardComponent = ({ data }) => {
-
   const deleteTender = (tenderName) => {
-    console.log("Delete Tender : ",  tenderName)  
-  }
+    console.log("Delete Tender : ", tenderName);
+    axios.delete("http://localhost:6969/delete_file", {
+      data: {
+        tenderName: tenderName,
+      },
+    }).then((res)=>{
+      window.location.reload();
+    });
+  };
 
   return (
     <>
@@ -83,7 +90,12 @@ const AdminCardComponent = ({ data }) => {
                   <br></br>
                 </Grid>
                 <Grid item xs={1}>
-                  <Button color="error" onClick={()=>{deleteTender(data.tenderName)}}>
+                  <Button
+                    color="error"
+                    onClick={() => {
+                      deleteTender(data.tenderName);
+                    }}
+                  >
                     <DeleteForeverIcon />
                   </Button>
                 </Grid>

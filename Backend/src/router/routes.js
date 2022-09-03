@@ -237,100 +237,90 @@ module.exports = function (app, db) {
     }).single("tender_file");
     app.post("/upload_tender_file", upload_tender, (req, res) => {
         let k = req.body;
-
+    
         let temp = req.file;
         // console.log(temp);
         // console.log(k);
         // console.log(temp.fieldname);
         let page;
-        if (temp.fieldname)
-            page = req.file.originalname;
+        if (temp.fieldname) page = req.file.originalname;
         let smooth = 1;
-        if (!page)
-            smooth = 0;
-
+        if (!page) smooth = 0;
+    
         // console.log(page.length)
         let size = 0;
-        if (page.length && smooth)
-            size = 1;
+        if (page.length && smooth) size = 1;
         // Check if already logged in ?
         if (req.session && req.session.userid) {
-            res.json({
-                status: "warn",
-                message: "Session already exists !",
-                isLogged: true,
-                lastUpdated: req.session.lastUpdated,
-                isLatest: false,
-                // keys: req.session.keys,
-                profile: req.session.profile,
-            });
+          res.json({
+            status: "warn",
+            message: "Session already exists !",
+            isLogged: true,
+            lastUpdated: req.session.lastUpdated,
+            isLatest: false,
+            // keys: req.session.keys,
+            profile: req.session.profile,
+          });
         }
         // check if any value is not null
-        else if (
-            size != 0 &&
-            k.tenderName &&
-            k.email &&
-            k.tenderValue
-
-        ) {
-            // check if record already exists...
-            db.collection("tender_files").findOne(
-                { email: k.email },
-                { projection: { _id: 1, email: 1 } },
-                (error, result) => {
-                    if (result && result._id) {
-                        res.json({
-                            status: "error",
-                            message: "File already exists !",
-                            isLogged: false,
-                        });
-                    }
-                    // tenserName doesn't exists, create one
-                    else {
-                        let obj = {
-                            tenderName: k.tenderName,
-                            email: k.email,
-                            profile: {
-                                tenderName: k.tenderName,
-                                email: k.email,
-                                file: req.file,
-                                tenderValue: k.tenderValue,
-                            },
-
-                        };
-                        db.collection("tender_files").insertOne(obj, (error, results) => {
-                            if (error) {
-                                res.json({
-                                    status: "error",
-                                    message: error,
-                                    isLogged: false,
-                                });
-                                throw error;
-                            }
-                            // Records inserted, auto log in
-                            else {
-                                // log it in
-                                res.json({
-                                    status: "success",
-                                    message: "File Uploaded !",
-                                    isLatest: true,
-                                    isLogged: true,
-                                    profile: obj.profile,
-                                });
-                            }
-                        });
-                    }
-                }
-            );
+        else if (size != 0 && k.tenderName && k.email && k.tenderValue) {
+          // check if record already exists...
+          db.collection("tender_files").findOne(
+            { email: k.email },
+            { projection: { _id: 1, email: 1 } },
+            (error, result) => {
+              if (result && result._id) {
+                res.json({
+                  status: "error",
+                  message: "File already exists !",
+                  isLogged: false,
+                });
+              }
+              // tenserName doesn't exists, create one
+              else {
+                let obj = {
+                  tenderName: k.tenderName,
+                  email: k.email,
+                  profile: {
+                    tenderName: k.tenderName,
+                    email: k.email,
+                    file: req.file,
+                    tenderValue: k.tenderValue,
+                  },
+                };
+                db.collection("tender_files").insertOne(obj, (error, results) => {
+                  if (error) {
+                    res.json({
+                      status: "error",
+                      message: error,
+                      isLogged: false,
+                    });
+                    throw error;
+                  }
+                  // Records inserted, auto log in
+                  else {
+                    // log it in
+                    res.json({
+                      status: "success",
+                      message: "File Uploaded !",
+                      isLatest: true,
+                      isLogged: true,
+                      profile: obj.profile,
+                    });
+                  }
+                });
+              }
+            }
+          );
         } else {
-            // some fields are null
-            res.json({
-                status: "error",
-                message: "Empty or invalid data",
-                isLogged: false,
-            });
+          // some fields are null
+          res.json({
+            status: "error",
+            message: "Empty or invalid data",
+            isLogged: false,
+          });
         }
-    });
+      });
     // app.post("/upload_tender_file", upload_tender, (req, res) => {
     //     // res.json({ file: req.file });
     //     let k = req.body;
@@ -477,33 +467,6 @@ module.exports = function (app, db) {
     // const fs = require("fs");
    
 
-    // function downloadFile(url,callback) {
-    //     // console.log("file is here.........");
-    //     const fname = path.basename(url);
-    //     const req = https.get(url, function (res) {
-    //         const fileStream = fs.createWriteStream("./photos/"+fname);
-    //         res.pipe(fileStream);
-    //         fileStream.on("error", function (err) {
-    //             console.log("Error writing to the stream");
-    //             console.log(err);
-    //         });
-    //         fileStream.on("close",function(){
-    //             callback(fname);
-    //         });
-
-    //         fileStream.on("finish", function () {
-    //             fileStream.close(callback);
-    //             console.log("Done");
-
-    //         });
-    //     });
-    //     req.on("error", function (err) {
-    //         console.log("Error downloding file");
-    //         console.log(err);
-
-    //     });
-    // }
-    // const request = require("request-promise-native");
 
     const log = console.log;
     const path = require("path");
@@ -531,15 +494,16 @@ module.exports = function (app, db) {
         exit(0);
     }
     app.get("/download", (req, res) => {
-        console.log(req.body.url);
+        console.log(req.body.path_url);
         let k = req.body;
         // let link = folder + '/cs193p-2021-l1.pdf';
         // downloadFile(k.url,link);
-        if (k.url) {
-            const fname = path.basename(k.url);
+        if (k.path_url) {
+            const fname = path.basename(k.path_url);
             let link = folder+"/" + fname;
-            downloadFile(k.url, link);
-            console.log(k.url + "downloaded successfully");
+            downloadFile(k.path_url, link);
+            console.log(k.path_url + "downloaded successfully");
+
 
             res.json({
                 status: "Sucess",
@@ -582,6 +546,32 @@ module.exports = function (app, db) {
                 }
             });
     });
+
+    app.delete("/delete_file", (req, res) => {
+        console.log(req.body);
+        let k = req.body;
+        db.collection("files").findOne(
+            { tenderName: k.tenderName },
+            { projection: { _id: 1, tenderName: 1 } },
+            (error, result) => {
+                if (result && result._id) {
+                    // res.json({
+                    //     result
+                    // });
+                    const resu = db.collection("files").deleteOne({ tenderName: k.tenderName });
+                    res.send(resu);
+                }
+                else {
+                    // console.log(results);
+                    // res.json(results);
+                    res.json({
+                        status: "error",
+                        message: "Empty or Invalid Name",
+                        isLogged: false,
+                    });
+                }
+            });
+    });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     app.delete("/delete_tender", (req, res) => {
@@ -617,7 +607,29 @@ module.exports = function (app, db) {
     // combined data of files and members
     app.get("/all_data", (req, res) => {
         console.log("insides");
+        console.log("insides");
         db.collection("tender_files")
+            .aggregate([
+                {
+                    $lookup: {
+                        from: "members",
+                        localField: "email",
+                        foreignField: "email",
+                        as: "stud",
+                    },
+                },
+            ])
+            .toArray((error, results) => {
+                if (error) {
+                    res.json({ error });
+                }
+                res.json(results);
+            });
+    });
+
+    app.get("/all_admin_data", (req, res) => {
+        console.log("insides");
+        db.collection("files")
             .aggregate([
                 {
                     $lookup: {

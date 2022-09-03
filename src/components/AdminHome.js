@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,6 +16,14 @@ const AdminHome = () => {
   const navigate = useNavigate();
 
   const logout = () => {
+    axios({
+      url: "http://localhost:6969/logout",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true
+    }).then((res) => {
+      console.log(res);
+    });
     navigate("/");  
   }
 

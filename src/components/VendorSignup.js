@@ -53,6 +53,8 @@ const VendorSignup = () => {
       axios({
         url: "http://localhost:6969/register",
         method: "POST",
+        withCredentials: true,
+        crossDomain: true,
         data: credentials,
       }).then((res) => {
         // console.log(res);
