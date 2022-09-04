@@ -6,13 +6,29 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
+import Container from "@mui/material/Container";
+import Link from "@mui/material/Link";
+import Divider from "@mui/material/Divider";
+
+function Copyright() {
+  return (
+    <Typography variant="subtitle2" color="text.secondary">
+      {"Copyright © "}
+      <Link color="inherit" href="https://www.rnsit.ac.in/cse/">
+        RNSIT,
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 const Home = () => {
   const theme = useTheme();
 
   return (
     <>
-      <Box>
+      <Box sx={{ minHeight: "100vh" }}>
         {/* Navbar*/}
         <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
           <AppBar position="static" elevation={0}>
@@ -36,7 +52,7 @@ const Home = () => {
         {/* Body of Home Page */}
         <Box
           sx={{
-            height: "90vh",
+            minHeight: "80vh",
             alignItems: "center",
           }}
         >
@@ -64,6 +80,50 @@ const Home = () => {
               </Button>
             </NavLink>
           </Box>
+        </Box>
+
+        {/* Footer of Home Page */}
+        <Box
+          component="footer"
+          sx={{
+            py: 3,
+            px: 2,
+            mt: "auto",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[200]
+                : theme.palette.grey[800],
+          }}
+        >
+          <Container maxWidth="xs">
+            <Typography variant="subtitle2" color="text.secondary">
+              {/* Made&nbsp;&nbsp;with&nbsp;&nbsp;<span style={{ color: "red" }}>&#10084;</span>&nbsp;&nbsp;by&nbsp;&nbsp; */}
+              Developed&nbsp;&nbsp;by&nbsp;&nbsp;
+              <Typography variant="overline" color="text.primary">
+                <Link color="inherit" href="#" underline="none">
+                  {" "}
+                  Abhishek
+                </Link>
+              </Typography>{" "}
+              ,&nbsp;
+              <Typography variant="overline" color="text.primary">
+                <Link color="inherit" href="#" underline="none">
+                  {" "}
+                  Sagun
+                </Link>
+              </Typography>
+              &nbsp; & &nbsp;
+              <Typography variant="overline" color="text.primary">
+                <Link color="inherit" href="#" underline="none">
+                  {" "}
+                  Tishya
+                </Link>
+              </Typography>{" "}
+              !
+            </Typography>
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+            <Copyright />
+          </Container>
         </Box>
       </Box>
     </>

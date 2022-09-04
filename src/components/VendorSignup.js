@@ -12,8 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { firebase,auth } from "../firebase";
-// import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { firebase, auth } from "../firebase";
 
 const initialValues = {
   vendorName: "",
@@ -51,7 +50,7 @@ const VendorSignup = () => {
 
     if (window.userVerified === "Yes") {
       axios({
-        url: "http://localhost:6969/register",
+        url: "https://tranquil-temple-34464.herokuapp.com/register",
         method: "POST",
         withCredentials: true,
         crossDomain: true,

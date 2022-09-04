@@ -4,21 +4,15 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import LoginIcon from "@mui/icons-material/Login";
-import { useTheme } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import { useNavigate } from "react-router-dom";
-import AdminGridComponent from "./AdminGridComponent";
 
 const AdminViewTender = () => {
   const navigate = useNavigate();
@@ -26,7 +20,7 @@ const AdminViewTender = () => {
   const [tenderDropdown, setTenderDropDown] = React.useState([]);
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://tranquil-temple-34464.herokuapp.com/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -44,7 +38,7 @@ const AdminViewTender = () => {
 
   React.useEffect(() => {
     axios({
-      url: "http://localhost:6969/all_data",
+      url: "https://tranquil-temple-34464.herokuapp.com/all_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -57,17 +51,18 @@ const AdminViewTender = () => {
         };
 
         var isNewData = 1;
-        for (var j = 0; j < data.length; j++){
+        for (var j = 0; j < data.length; j++) {
           let tenderEndDate = new Date(obj.endDate);
-          if (data[j].tenderName.trim() === obj.tenderName.trim()
-              || currentDate < tenderEndDate)
+          if (
+            data[j].tenderName.trim() === obj.tenderName.trim() ||
+            currentDate < tenderEndDate
+          )
             isNewData = 0;
         }
-        if (isNewData)
-          data.push(obj);
+        if (isNewData) data.push(obj);
       }
       setTenders(data);
-      
+
       // Dropdown Menu
       const temp_data =
         tenders.length > 0 &&

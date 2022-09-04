@@ -31,16 +31,16 @@ const AdminSignin = () => {
   const navigate = useNavigate();
 
   axios({
-    url: "http://localhost:6969/logout",
+    url: "https://tranquil-temple-34464.herokuapp.com/logout",
     method: "GET",
     withCredentials: true,
-    crossDomain: true
+    crossDomain: true,
   }).then((res) => {
     console.log(res);
   });
 
   axios({
-    url: "http://localhost:6969/status",
+    url: "https://tranquil-temple-34464.herokuapp.com/status",
     method: "GET",
     withCredentials: true,
     crossDomain: true,
@@ -62,11 +62,11 @@ const AdminSignin = () => {
     };
 
     axios({
-      url: "http://localhost:6969/signin",
+      url: "https://tranquil-temple-34464.herokuapp.com/signin",
       method: "POST",
       data: credential,
       withCredentials: true,
-      crossDomain: true
+      crossDomain: true,
     }).then((res) => {
       // console.log(res);
       if (res.data.status === "success") {
