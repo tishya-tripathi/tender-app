@@ -202,8 +202,8 @@ module.exports = function (app, db) {
             && k.endDate ) {
           // check if record already exists...
           db.collection("tender_files").findOne(
-            { email: k.email },
-            { projection: { _id: 1, email: 1 } },
+            
+            { projection: { _id: 1, email: 1, tenderName: 1 } },
             (error, result) => {
               if (result && result._id) {
                 res.json({
