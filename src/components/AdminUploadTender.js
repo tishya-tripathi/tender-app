@@ -12,14 +12,12 @@ import { useTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import Stack from "@mui/material/Stack";
 import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { NavigateBefore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import AdminCardComponent from "./AdminCardComponent";
 
@@ -28,7 +26,7 @@ const AdminUploadTender = () => {
   const formatDate = (param) => {
     var x = new Date(param);
     var date = ("0" + x.getDate().toString()).slice(-2);
-    var month = ("0" + (x.getMonth()+1).toString()).slice(-2);
+    var month = ("0" + (x.getMonth() + 1).toString()).slice(-2);
     var year = x.getFullYear().toString();
     return month + "/" + date + "/" + year;
   };
@@ -40,30 +38,30 @@ const AdminUploadTender = () => {
 
   React.useEffect(() => {
     axios({
-      url: "http://localhost:6969/all_admin_data",
+      url: "https://tranquil-temple-34464.herokuapp.com/all_admin_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
       console.log(res);
       let temp_data = [];
-      for(let i=0;i<res.data.length;i++){
+      for (let i = 0; i < res.data.length; i++) {
         const obj = {
           tenderName: res.data[i].tenderName,
           startDate: res.data[i].profile.startDate,
           endDate: res.data[i].profile.endDate,
-        }
+        };
         temp_data.push(obj);
       }
       setData(temp_data);
     });
-  },[]);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     let check = 1;
     axios({
-      url: "http://localhost:6969/status",
+      url: "https://tranquil-temple-34464.herokuapp.com/status",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -92,10 +90,10 @@ const AdminUploadTender = () => {
       try {
         const response = await axios({
           method: "post",
-          url: "http://localhost:6969/upload_vender_admin",
+          url: "https://tranquil-temple-34464.herokuapp.com/upload_vender_admin",
           data: newTender,
           headers: { "Content-Type": "multipart/form-data" },
-        }).then((res)=>{
+        }).then((res) => {
           window.location.reload();
         });
       } catch (error) {
@@ -130,7 +128,7 @@ const AdminUploadTender = () => {
 
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://tranquil-temple-34464.herokuapp.com/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,

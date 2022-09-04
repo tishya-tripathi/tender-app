@@ -15,7 +15,6 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { Tune } from "@mui/icons-material";
 
 const initialValues = {
   email: "",
@@ -33,10 +32,10 @@ const VendorSignin = () => {
   const navigate = useNavigate();
 
   axios({
-    url: "http://localhost:6969/logout",
+    url: "https://tranquil-temple-34464.herokuapp.com/logout",
     method: "GET",
     withCredentials: true,
-    crossDomain: true
+    crossDomain: true,
   }).then((res) => {
     console.log(res);
   });
@@ -52,10 +51,10 @@ const VendorSignin = () => {
     };
 
     axios({
-      url: "http://localhost:6969/vendors_signin",
+      url: "https://tranquil-temple-34464.herokuapp.com/vendors_signin",
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
       method: "POST",
       withCredentials: true,

@@ -10,22 +10,21 @@ import IconButton from "@mui/material/IconButton";
 import LoginIcon from "@mui/icons-material/Login";
 import { useTheme } from "@mui/material/styles";
 
-
 const AdminHome = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://tranquil-temple-34464.herokuapp.com/logout",
       method: "GET",
       withCredentials: true,
-      crossDomain: true
+      crossDomain: true,
     }).then((res) => {
       console.log(res);
     });
-    navigate("/");  
-  }
+    navigate("/");
+  };
 
   return (
     <>
@@ -46,7 +45,12 @@ const AdminHome = () => {
               >
                 Tender Management Portal
               </Typography>
-              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
+              <IconButton
+                edge="start"
+                color="warning"
+                aria-label="Logout"
+                onClick={logout}
+              >
                 <LoginIcon />
               </IconButton>
             </Toolbar>
@@ -67,7 +71,10 @@ const AdminHome = () => {
               alignItems: "center",
             }}
           >
-            <NavLink to="/admin/uploadtender" style={{ textDecoration: "none" }}>
+            <NavLink
+              to="/admin/uploadtender"
+              style={{ textDecoration: "none" }}
+            >
               <Button
                 variant="contained"
                 sx={{ marginTop: "10rem", paddingX: "5rem", paddingY: "2rem" }}
