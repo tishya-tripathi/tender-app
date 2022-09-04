@@ -9,6 +9,14 @@ import Stack from "@mui/material/Stack";
 import CheckBoxRoundedIcon from "@mui/icons-material/CheckBoxRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+// Used for snackbar Alert
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 
 const VendorCardComponent = ({ data }) => {
   const [selectedFile, setSelectedFile] = React.useState(null);
@@ -35,15 +43,23 @@ const VendorCardComponent = ({ data }) => {
     event.preventDefault();
 
     if (check === 1) {
-      console.log("Tender Name : ", event.target.querySelector("h5").innerText);
-      console.log("Tender Value : ", event.target.tenderValue.value);
+      let tendername = event.target.querySelector("h5").innerText;    // User selected
+      let tendervalue = event.target.tenderValue.value;               // User selected
+
+      // Retrieve endDate from "data" for the User selected tender name
+      let enddate;
+      for (let i = 0; i < data.length; i++)
+        if (data[i].tenderName.trim() === tendername.trim())
+          enddate = data[i].endDate;
+      console.log(enddate);
+      //  -------- Now "enddate" has the endDate for the User Selected tender
 
       const formData = new FormData(event.currentTarget);
       formData.append("file", selectedFile);
       const newTender = {
         // File Upload
-        tenderName: event.target.querySelector("h5").innerText,
-        tenderValue: event.target.tenderValue.value,
+        tenderName: tendername,
+        tenderValue: tendervalue,
         email: email,
         tender_file: formData.get("file"),
       };
@@ -57,6 +73,7 @@ const VendorCardComponent = ({ data }) => {
           data: newTender,
           headers: { "Content-Type": "multipart/form-data" },
         });
+        setOpen(true);
       } catch (error) {
         console.log(error);
       }
@@ -76,6 +93,22 @@ const VendorCardComponent = ({ data }) => {
   const handleFileSelect = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+
+
+  // -----Opening and Closing snackbar-----
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+  // -----------------------------
 
   return (
     <>
@@ -158,8 +191,14 @@ const VendorCardComponent = ({ data }) => {
               </Grid>
             </Paper>
           </Grid>
+          
         );
       })}
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Tender Uploaded.
+        </Alert>
+      </Snackbar>
     </>
   );
 };
