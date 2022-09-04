@@ -12,6 +12,8 @@ import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import VendorCardComponent from "./VendorCardComponent";
 
+
+
 const VendorUploadTender = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -22,45 +24,46 @@ const VendorUploadTender = () => {
 
   React.useEffect(() => {
     axios({
-      url: "https://tranquil-temple-34464.herokuapp.com/all_admin_data",
+      url: "http://localhost:6969/all_admin_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
       console.log(res);
       let temp_data = [];
-      for (let i = 0; i < res.data.length; i++) {
+      for(let i=0;i<res.data.length;i++){
         const obj = {
           tenderName: res.data[i].tenderName,
           startDate: res.data[i].profile.startDate,
           endDate: res.data[i].profile.endDate,
-        };
+        }
 
         // Comment these 3 statements if all available tenders are to be shown under Vendor Upload
         const sDate = new Date(obj.startDate);
         const eDate = new Date(obj.endDate);
-        if (currentDate > sDate && currentDate < eDate) temp_data.push(obj);
+        if(currentDate>sDate && currentDate<eDate)
+          temp_data.push(obj);
       }
 
       setData(temp_data);
     });
-  }, []);
+  },[]);
 
   const logout = () => {
     axios({
-      url: "https://tranquil-temple-34464.herokuapp.com/logout",
+      url: "http://localhost:6969/logout",
       method: "GET",
       withCredentials: true,
-      crossDomain: true,
+      crossDomain: true
     }).then((res) => {
       console.log(res);
-      if (res.data.isLogged === false) {
+      if(res.data.isLogged === false){
         return;
-      } else {
-      }
+      } else {}
     });
-    navigate("/");
-  };
+    navigate("/");  
+  }
+
 
   return (
     <>
@@ -81,12 +84,7 @@ const VendorUploadTender = () => {
               >
                 Upload Tender
               </Typography>
-              <IconButton
-                edge="start"
-                color="warning"
-                aria-label="Logout"
-                onClick={logout}
-              >
+              <IconButton edge="start" color="warning" aria-label="Logout" onClick={logout}>
                 <LoginIcon />
               </IconButton>
             </Toolbar>
@@ -95,7 +93,7 @@ const VendorUploadTender = () => {
 
         <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
-            <VendorCardComponent data={data} />
+            <VendorCardComponent data={ data } />
           </Grid>
         </Container>
       </Box>

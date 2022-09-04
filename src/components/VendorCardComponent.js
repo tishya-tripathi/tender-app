@@ -17,13 +17,13 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+
 const VendorCardComponent = ({ data }) => {
   const [selectedFile, setSelectedFile] = React.useState(null);
-  let email,
-    check = 1;
+  let email, check=1;
   try {
     axios({
-      url: "https://tranquil-temple-34464.herokuapp.com/status",
+      url: "http://localhost:6969/status",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -37,14 +37,14 @@ const VendorCardComponent = ({ data }) => {
         console.log(res.data.profile.email);
       }
     });
-  } catch (err) {}
+  } catch(err){}
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (check === 1) {
-      let tendername = event.target.querySelector("h5").innerText; // User selected
-      let tendervalue = event.target.tenderValue.value; // User selected
+      let tendername = event.target.querySelector("h5").innerText;    // User selected
+      let tendervalue = event.target.tenderValue.value;               // User selected
 
       // Retrieve endDate from "data" for the User selected tender name
       let enddate;
@@ -70,7 +70,7 @@ const VendorCardComponent = ({ data }) => {
       try {
         const response = await axios({
           method: "post",
-          url: "https://tranquil-temple-34464.herokuapp.com/upload_tender_file",
+          url: "http://localhost:6969/upload_tender_file",
           data: newTender,
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -94,6 +94,7 @@ const VendorCardComponent = ({ data }) => {
   const handleFileSelect = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+
 
   // -----Opening and Closing snackbar-----
   const [open, setOpen] = React.useState(false);
@@ -191,6 +192,7 @@ const VendorCardComponent = ({ data }) => {
               </Grid>
             </Paper>
           </Grid>
+          
         );
       })}
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>

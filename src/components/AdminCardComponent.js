@@ -25,25 +25,21 @@ import { useNavigate } from "react-router-dom";
 const AdminCardComponent = ({ data }) => {
   const deleteTender = (tenderName) => {
     console.log("Delete Tender : ", tenderName);
-    axios
-      .delete("https://tranquil-temple-34464.herokuapp.com/delete_file", {
-        data: {
-          tenderName: tenderName,
-        },
-      })
-      .then((res) => {
-        window.location.reload();
-      });
+    axios.delete("http://localhost:6969/delete_file", {
+      data: {
+        tenderName: tenderName,
+      },
+    }).then((res)=>{
+      window.location.reload();
+    });
 
-    axios
-      .delete("https://tranquil-temple-34464.herokuapp.com/delete_tender", {
-        data: {
-          tenderName: tenderName,
-        },
-      })
-      .then((res) => {
-        window.location.reload();
-      });
+    axios.delete("http://localhost:6969/delete_tender", {
+      data: {
+        tenderName: tenderName,
+      },
+    }).then((res)=>{
+      window.location.reload();
+    });
   };
 
   return (
