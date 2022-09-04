@@ -20,7 +20,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const VendorCardComponent = ({ data }) => {
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [check, setCheck] = React.useState(0);
-  let email;
+  const [email, setEmail] = React.useState(null);
   try {
     axios({
       url: "https://tranquil-temple-34464.herokuapp.com/status",
@@ -31,10 +31,13 @@ const VendorCardComponent = ({ data }) => {
       console.log(res);
       if (res.data.isLogged === false) {
         setCheck(0);
+        setEmail( window.sessionStorage.getItem("userEmail") );
+        console.log("Not Logged In", email);
       } else {
         setCheck(1);
-        email = res.data.profile.email;
-        console.log(res.data.profile.email);
+        setEmail( window.sessionStorage.getItem("userEmail") );
+        console.log("Logged In", email);
+        // console.log(res.data.profile.email);
       }
     });
   } catch (err) {}
@@ -42,7 +45,7 @@ const VendorCardComponent = ({ data }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (check === 1) {
+    if (check === 1 || check === 0) {
       let tendername = event.target.querySelector("h5").innerText; // User selected
       let tendervalue = event.target.tenderValue.value; // User selected
 

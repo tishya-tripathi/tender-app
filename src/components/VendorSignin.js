@@ -59,6 +59,7 @@ const VendorSignin = () => {
     }).then((res) => {
       // console.log(res);
       if (res.data.status === "success") {
+        window.sessionStorage.setItem("userEmail", res.data.profile.email);
         navigate("/vendor/uploadtender");
       } else {
         setOpen(true);
