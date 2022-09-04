@@ -67,7 +67,7 @@ const AdminViewTender = () => {
         });
       setTenderDropDown(temp_data);
     });
-  }, []);
+  });
 
   // Redirect and Display Tender
   const displayTender = (e) => {

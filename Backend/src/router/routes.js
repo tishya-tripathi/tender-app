@@ -390,32 +390,6 @@ module.exports = function (app, db) {
                 }
             });
     });
-
-    app.delete("/delete_file", (req, res) => {
-        console.log(req.body);
-        let k = req.body;
-        db.collection("files").findOne(
-            { tenderName: k.tenderName },
-            { projection: { _id: 1, tenderName: 1 } },
-            (error, result) => {
-                if (result && result._id) {
-                    // res.json({
-                    //     result
-                    // });
-                    const resu = db.collection("files").deleteOne({ tenderName: k.tenderName });
-                    res.send(resu);
-                }
-                else {
-                    // console.log(results);
-                    // res.json(results);
-                    res.json({
-                        status: "error",
-                        message: "Empty or Invalid Name",
-                        isLogged: false,
-                    });
-                }
-            });
-    });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     app.delete("/delete_tender", (req, res) => {
@@ -493,26 +467,6 @@ module.exports = function (app, db) {
     });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
-    app.get("/all_data", (req, res) => {
-        console.log("insides");
-        db.collection("files")
-            .aggregate([
-                {
-                    $lookup: {
-                        from: "members",
-                        localField: "email",
-                        foreignField: "email",
-                        as: "stud",
-                    },
-                },
-            ])
-            .toArray((error, results) => {
-                if (error) {
-                    res.json({ error });
-                }
-                res.json(results);
-            });
-    });
     // =======================================================================*******************************================================
     // =======================================================================*******************************================================
     // post route for register (expects json data)

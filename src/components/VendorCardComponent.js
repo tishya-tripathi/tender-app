@@ -61,6 +61,7 @@ const VendorCardComponent = ({ data }) => {
         tenderName: tendername,
         tenderValue: tendervalue,
         email: email,
+        endDate: enddate,
         tender_file: formData.get("file"),
       };
       console.log(newTender);

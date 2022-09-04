@@ -32,6 +32,14 @@ const AdminCardComponent = ({ data }) => {
     }).then((res)=>{
       window.location.reload();
     });
+
+    axios.delete("http://localhost:6969/delete_tender", {
+      data: {
+        tenderName: tenderName,
+      },
+    }).then((res)=>{
+      window.location.reload();
+    });
   };
 
   return (
