@@ -20,6 +20,8 @@ const VendorUploadTender = () => {
 
   const [data, setData] = React.useState([]);
 
+  const currentDate = new Date();
+
   React.useEffect(() => {
     axios({
       url: "http://localhost:6969/all_admin_data",
@@ -35,8 +37,14 @@ const VendorUploadTender = () => {
           startDate: res.data[i].profile.startDate,
           endDate: res.data[i].profile.endDate,
         }
-        temp_data.push(obj);
+
+        // Comment these 3 statements if all available tenders are to be shown under Vendor Upload
+        const sDate = new Date(obj.startDate);
+        const eDate = new Date(obj.endDate);
+        if(currentDate>sDate && currentDate<eDate)
+          temp_data.push(obj);
       }
+
       setData(temp_data);
     });
   },[]);
