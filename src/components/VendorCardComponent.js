@@ -19,8 +19,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const VendorCardComponent = ({ data }) => {
   const [selectedFile, setSelectedFile] = React.useState(null);
-  let email,
-    check = 1;
+  const [check, setCheck] = React.useState(0);
+  let email;
   try {
     axios({
       url: "https://tranquil-temple-34464.herokuapp.com/status",
@@ -30,9 +30,9 @@ const VendorCardComponent = ({ data }) => {
     }).then((res) => {
       console.log(res);
       if (res.data.isLogged === false) {
-        check = 0;
+        setCheck(0);
       } else {
-        check = 1;
+        setCheck(1);
         email = res.data.profile.email;
         console.log(res.data.profile.email);
       }

@@ -21,6 +21,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { useNavigate } from "react-router-dom";
 import AdminCardComponent from "./AdminCardComponent";
 
+axios.defaults.withCredentials = true;
+
 const AdminUploadTender = () => {
   const theme = useTheme();
   const formatDate = (param) => {
@@ -35,6 +37,7 @@ const AdminUploadTender = () => {
   // a local state to store the currently selected file.
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [data, setData] = React.useState([]);
+  const [check, setCheck] = React.useState(0);
 
   React.useEffect(() => {
     axios({
@@ -55,11 +58,35 @@ const AdminUploadTender = () => {
       }
       setData(temp_data);
     });
+
+    const checkStatus = async () => {
+      try {
+        const resp = await axios({
+          url: "https://tranquil-temple-34464.herokuapp.com/status",
+          method: "GET",
+          withCredentials: true,
+          crossDomain: true
+        }).then((res) => {
+          console.log(res);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    checkStatus();
+    // axios.get("https://tranquil-temple-34464.herokuapp.com/status",{
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   withCredentials: true,
+    //   crossDomain: true,
+    // }).then((res) => {
+    //   console.log(res);
+    // })
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let check = 1;
     axios({
       url: "https://tranquil-temple-34464.herokuapp.com/status",
       method: "GET",
@@ -68,9 +95,10 @@ const AdminUploadTender = () => {
     }).then((res) => {
       console.log(res);
       if (res.data.isLogged === false) {
-        check = 0;
+        setCheck(0);
+        console.log("Not Logged");
       } else {
-        check = 1;
+        setCheck(1);
       }
     });
     if (check === 1) {

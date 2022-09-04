@@ -52,10 +52,6 @@ const VendorSignin = () => {
 
     axios({
       url: "https://tranquil-temple-34464.herokuapp.com/vendors_signin",
-      headers: {
-        // "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-      },
       method: "POST",
       withCredentials: true,
       crossDomain: true,

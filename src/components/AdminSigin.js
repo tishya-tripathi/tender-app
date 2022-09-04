@@ -20,6 +20,8 @@ const initialValues = {
   password: "",
 };
 
+axios.defaults.withCredentials = true;
+
 // Used for snackbar Alert
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -29,27 +31,16 @@ const theme = createTheme();
 
 const AdminSignin = () => {
   const navigate = useNavigate();
-
-  axios({
-    url: "https://tranquil-temple-34464.herokuapp.com/logout",
-    method: "GET",
-    withCredentials: true,
-    crossDomain: true,
-  }).then((res) => {
-    console.log(res);
-  });
-
-  axios({
-    url: "https://tranquil-temple-34464.herokuapp.com/status",
-    method: "GET",
-    withCredentials: true,
-    crossDomain: true,
-  }).then((res) => {
-    console.log(res);
-    if (res.data.isLogged === true) {
-      navigate("/admin/home");
-    }
-  });
+  React.useEffect(() => {
+    axios({
+      url: "https://tranquil-temple-34464.herokuapp.com/logout",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+    });
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,20 +52,48 @@ const AdminSignin = () => {
       admin: true,
     };
 
-    axios({
-      url: "https://tranquil-temple-34464.herokuapp.com/signin",
-      method: "POST",
-      data: credential,
-      withCredentials: true,
-      crossDomain: true,
-    }).then((res) => {
-      // console.log(res);
-      if (res.data.status === "success") {
-        navigate("/admin/home");
-      } else {
-        setOpen(true);
+    // axios({
+    //   url: "https://tranquil-temple-34464.herokuapp.com/signin",
+    //   method: "POST",
+    //   data: credential,
+    //   withCredentials: true,
+    //   crossDomain: true,
+    // }).then((res) => {
+    //   // console.log(res);
+    //   if (res.data.status === "success") {
+    //     navigate("/admin/home");
+    //   } else {
+    //     setOpen(true);
+    //   }
+    // });
+
+    const signIn = async () => {
+      try {
+        const resp = await axios
+          .post(
+            "https://tranquil-temple-34464.herokuapp.com/signin",
+            credential,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+              crossDomain: true,
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.data.status === "success") {
+              navigate("/admin/home");
+            } else {
+              setOpen(true);
+            }
+          });
+      } catch (err) {
+        console.log(err);
       }
-    });
+    };
+    signIn();
   };
 
   const [values, setValues] = React.useState(initialValues);
