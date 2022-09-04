@@ -235,7 +235,7 @@ const AdminUploadTender = () => {
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DesktopDatePicker
                           label="Start Date"
-                          minDate={new Date()}
+                          // minDate={new Date()}
                           value={startDate}
                           onChange={handleStartDateChange}
                           renderInput={(params) => <TextField {...params} />}
@@ -248,7 +248,7 @@ const AdminUploadTender = () => {
                       >
                         <DesktopDatePicker
                           label="End Date"
-                          minDate={new Date()}
+                          // minDate={new Date()}
                           value={endDate}
                           onChange={handleEndDateChange}
                           renderInput={(params) => <TextField {...params} />}

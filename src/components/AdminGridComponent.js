@@ -26,7 +26,7 @@ const AdminGridComponent = () => {
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
     });
     navigate("/");
   };
@@ -40,10 +40,10 @@ const AdminGridComponent = () => {
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
       const data = [];
       for (var i = 0; i < res.data.length; i++) {
-        console.log(res.data[i].profile.endDate);
+        // console.log(res.data[i].profile.endDate);
         if (res.data[i].tenderName === tenderName && res.data[i].stud.length !== 0) {
           var obj = {
             id: i + 1,
@@ -57,7 +57,7 @@ const AdminGridComponent = () => {
         }
       }
       setRows(data);
-      console.log(rows);
+      // console.log(rows);
     });
   }, [])
 
@@ -119,7 +119,7 @@ const AdminGridComponent = () => {
                     withCredentials: true,
                     crossDomain: true,
                   }).then((res) => {
-                    console.log(res);
+                    // console.log(res);
                   });
               }}
             >

@@ -31,7 +31,7 @@ const AdminViewTender = () => {
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.data.isLogged === false) {
         return;
       } else {
@@ -39,6 +39,8 @@ const AdminViewTender = () => {
     });
     navigate("/");
   };
+
+  const currentDate = new Date();
 
   React.useEffect(() => {
     axios({
@@ -51,10 +53,21 @@ const AdminViewTender = () => {
       for (var i = 0; i < res.data.length; i++) {
         var obj = {
           tenderName: res.data[i].tenderName,
+          endDate: res.data[i].profile.endDate,
         };
-        data.push(obj);
+
+        var isNewData = 1;
+        for (var j = 0; j < data.length; j++){
+          let tenderEndDate = new Date(obj.endDate);
+          if (data[j].tenderName.trim() === obj.tenderName.trim()
+              || currentDate < tenderEndDate)
+            isNewData = 0;
+        }
+        if (isNewData)
+          data.push(obj);
       }
       setTenders(data);
+      
       // Dropdown Menu
       const temp_data =
         tenders.length > 0 &&
