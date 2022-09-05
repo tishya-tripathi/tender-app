@@ -100,21 +100,21 @@ const Home = () => {
               {/* Made&nbsp;&nbsp;with&nbsp;&nbsp;<span style={{ color: "red" }}>&#10084;</span>&nbsp;&nbsp;by&nbsp;&nbsp; */}
               Developed&nbsp;&nbsp;by&nbsp;&nbsp;
               <Typography variant="overline" color="text.primary">
-                <Link color="inherit" href="#" underline="none">
+                <Link color="inherit" href="https://www.linkedin.com/in/abhishekjaiswal1308/" underline="none">
                   {" "}
                   Abhishek
                 </Link>
               </Typography>{" "}
               ,&nbsp;
               <Typography variant="overline" color="text.primary">
-                <Link color="inherit" href="#" underline="none">
+                <Link color="inherit" href="https://www.linkedin.com/in/sagun-sangwan-9662401b2/" underline="none">
                   {" "}
                   Sagun
                 </Link>
               </Typography>
               &nbsp; & &nbsp;
               <Typography variant="overline" color="text.primary">
-                <Link color="inherit" href="#" underline="none">
+                <Link color="inherit" href="https://www.linkedin.com/in/tishya-tripathi/" underline="none">
                   {" "}
                   Tishya
                 </Link>
