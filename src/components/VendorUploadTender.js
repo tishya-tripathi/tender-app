@@ -37,9 +37,9 @@ const VendorUploadTender = () => {
         };
 
         // Comment these 3 statements if all available tenders are to be shown under Vendor Upload
-        // const sDate = new Date(obj.startDate);
-        // const eDate = new Date(obj.endDate);
-        // if (currentDate > sDate && currentDate < eDate)
+        const sDate = new Date(obj.startDate);
+        const eDate = new Date(obj.endDate);
+        if (currentDate > sDate && currentDate < eDate)
           temp_data.push(obj);
       }
 
