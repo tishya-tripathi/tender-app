@@ -100,6 +100,7 @@ const VendorSignup = () => {
 
   const verifyOTP = () => {
     let code = values["otp"];
+    window.userVerified = "Yes";
     window.result
       .confirm(code)
       .then(() => {
