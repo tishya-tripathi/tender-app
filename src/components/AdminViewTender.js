@@ -43,6 +43,7 @@ const AdminViewTender = () => {
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
+      console.log("-----------res data----------------");
       const data = [];
       for (var i = 0; i < res.data.length; i++) {
         var obj = {

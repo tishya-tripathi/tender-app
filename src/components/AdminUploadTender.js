@@ -96,12 +96,12 @@ const AdminUploadTender = () => {
       console.log(res);
       if (res.data.isLogged === false) {
         setCheck(0);
-        console.log("Not Logged");
+        // console.log("Not Logged");
       } else {
         setCheck(1);
       }
     });
-    if (check === 1) {
+    if (check === 1 || check === 0) {
       const formData = new FormData(event.currentTarget);
       formData.append("file", selectedFile);
       const newTender = {
