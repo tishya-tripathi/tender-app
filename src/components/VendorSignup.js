@@ -48,7 +48,7 @@ const VendorSignup = () => {
       admin: false,
     };
 
-    if ( 1>0 || window.userVerified === "Yes") {
+    if ( window.userVerified === "Yes") {
       axios({
         url: "https://tranquil-temple-34464.herokuapp.com/register",
         method: "POST",
@@ -100,7 +100,6 @@ const VendorSignup = () => {
 
   const verifyOTP = () => {
     let code = values["otp"];
-    window.userVerified = "Yes";
     window.result
       .confirm(code)
       .then(() => {
