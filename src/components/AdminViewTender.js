@@ -129,7 +129,7 @@ const AdminViewTender = () => {
             <Grid item xs={8}>
               <FormControl sx={{ width: 350 }}>
                 <InputLabel id="demo-simple-select-label">
-                  Programme *
+                  Select Tender
                 </InputLabel>
                 <Select
                   variant="filled"
