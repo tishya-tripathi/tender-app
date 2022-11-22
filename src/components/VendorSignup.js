@@ -37,18 +37,18 @@ const VendorSignup = () => {
   const axios = require("axios");
 
   async function generateOTP() {
+    var string =
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let OTP = "";
 
-    var string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let OTP = '';
-      
     var len = string.length;
-    for (let i = 0; i < 6; i++ ) {
-        OTP += string[Math.floor(Math.random() * len)];
+    for (let i = 0; i < 6; i++) {
+      OTP += string[Math.floor(Math.random() * len)];
     }
     // console.log(OTP);
     window.emailedText = OTP;
     // setEmailText(OTP);
-}
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -80,8 +80,14 @@ const VendorSignup = () => {
               "userVendorName",
               res.data.profile.name
             );
-            window.sessionStorage.setItem("userOrg", res.data.profile.organization);
-            window.sessionStorage.setItem("userPhone", res.data.profile.phoneno);
+            window.sessionStorage.setItem(
+              "userOrg",
+              res.data.profile.organization
+            );
+            window.sessionStorage.setItem(
+              "userPhone",
+              res.data.profile.phoneno
+            );
             navigate("/vendor/uploadtender");
           } else {
             setOpen(true);
@@ -130,33 +136,25 @@ const VendorSignup = () => {
   const [emailVerified, setEmailVerified] = React.useState(false);
 
   const verifyEMAILOTP = () => {
-
-    if (values.emailotp === "")
-      return;
+    if (values.emailotp === "") return;
     // console.log("values.emailotp ", values.emailotp)
     // console.log("window.emailedText ", window.emailedText);
-    if (values.emailotp == window.emailedText)
-    {
-      // snackbar Email Verified  
+    if (values.emailotp == window.emailedText) {
+      // snackbar Email Verified
       console.log("Email Verified");
       setEmailVerified(true);
       setOpen9(true);
-    }
-    else
-    {
-      // snackbar Email NOT Verified  
+    } else {
+      // snackbar Email NOT Verified
       console.log("Email NOT Verified");
-      setEmailVerified(false); 
+      setEmailVerified(false);
       setOpen7(true);
     }
-
   };
 
   const sendEMAILOTP = async () => {
+    if (values.email == null) return;
 
-    if (values.email== null)
-      return;
-    
     setEmailVerified(false);
 
     await generateOTP();
@@ -167,7 +165,12 @@ const VendorSignup = () => {
       message: window.emailedText.toString(),
     };
     await window.emailjs
-      .send("service_d9uzoqn", "template_remy2ow", templateParams, "jVJiCS_0zN5eGjcJC")
+      .send(
+        "service_d9uzoqn",
+        "template_remy2ow",
+        templateParams,
+        "jVJiCS_0zN5eGjcJC"
+      )
       .then(
         function (response) {
           console.log("SUCCESS!", response.status, response.text);
@@ -191,7 +194,7 @@ const VendorSignup = () => {
     //     From: "tender@murudeshwartempletender.com",
     //     Subject: "One Time Password for Murudeshwar Temple Tender",
     //     Body:  window.emailedText.toString() + "\tThis your 6-digit OTP for Murudeshwar Temple Tender.",
-    // }).then((message) => 
+    // }).then((message) =>
     // {
     //   console.log(message);
     //   if (message == "OK")
@@ -199,7 +202,7 @@ const VendorSignup = () => {
     //     // snackbar "OTP Sent to EMail"
     //     console.log("OTP Sent");
     //     setOpen10(true);
-    //   }  
+    //   }
     //   else
     //   {
     //     // snackbar "Invalid EMail"
@@ -397,7 +400,13 @@ const VendorSignup = () => {
               value={values.emailotp}
               onChange={handleInputChange}
             />
-            <Button xs="true" variant="outlined" onClick={() => { verifyEMAILOTP(); }}>
+            <Button
+              xs="true"
+              variant="outlined"
+              onClick={() => {
+                verifyEMAILOTP();
+              }}
+            >
               Verify EMAIL OTP
             </Button>
 
@@ -481,7 +490,7 @@ const VendorSignup = () => {
       </Snackbar>
       <Snackbar open={open10} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          OTP sent to Email 
+          OTP sent to Email
         </Alert>
       </Snackbar>
     </ThemeProvider>

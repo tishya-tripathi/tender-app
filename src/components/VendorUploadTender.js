@@ -37,7 +37,9 @@ const VendorUploadTender = () => {
           tenderName: res.data[i].tenderName,
           startDate: res.data[i].profile.startDate,
           endDate: res.data[i].profile.endDate,
-          filename: "https://murudeshwar.org/" + (res.data[i].profile.file.path).toString(),
+          filename:
+            "https://murudeshwar.org/" +
+            res.data[i].profile.file.path.toString(),
           minTenderAmount: res.data[i].profile.minTenderAmount,
         };
 

@@ -141,9 +141,16 @@ const VendorTenderDetails = () => {
           }
 
           // Set download links of EMD, PAN, AADHAR to state variables
-          sethrefEMD("https://murudeshwar.org/" + (res.data[i].profile.edm.path).toString() );
-          sethrefAADHAR("https://murudeshwar.org/" + (res.data[i].profile.aadhar.path).toString() );
-          sethrefPAN("https://murudeshwar.org/" + (res.data[i].profile.pan.path).toString() );
+          sethrefEMD(
+            "https://murudeshwar.org/" + res.data[i].profile.edm.path.toString()
+          );
+          sethrefAADHAR(
+            "https://murudeshwar.org/" +
+              res.data[i].profile.aadhar.path.toString()
+          );
+          sethrefPAN(
+            "https://murudeshwar.org/" + res.data[i].profile.pan.path.toString()
+          );
 
           // Set isWithdrawn
           setIsWithdrawn(res.data[i].withdraw);
@@ -274,10 +281,19 @@ const VendorTenderDetails = () => {
 
         // Add Acknowledge Button
         console.log("Making PDF");
-        await makePDF(newTender.tenderValue, newTender.emdNumber, urlFile1, urlFile2, urlFile3);
-        
-        confirm({ description: 'Please review the downloaded Tender Application. Then click \'OK\' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).' })
-          .then(async () => { 
+        await makePDF(
+          newTender.tenderValue,
+          newTender.emdNumber,
+          urlFile1,
+          urlFile2,
+          urlFile3
+        );
+
+        confirm({
+          description:
+            "Please review the downloaded Tender Application. Then click 'OK' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).",
+        })
+          .then(async () => {
             // User clicked OK
             setOpen4(true);
             // AXIOS Connection -  Upload New Tender
@@ -300,12 +316,12 @@ const VendorTenderDetails = () => {
               window.location.reload();
               return;
             }
-           })
-          .catch(() => { 
+          })
+          .catch(() => {
             // User clicked CANCEL or clickaway
             setFirstClick(true);
             return;
-           });
+          });
       }
       return;
     }
@@ -316,142 +332,137 @@ const VendorTenderDetails = () => {
 
       // make PDF
       var updt_value, updt_emdnum, updt_url1, updt_url2, updt_url3;
-      if (newTender.edm !== "null")
-        updt_url1 = urlFile1;
-      else
-        updt_url1 = hrefEMD;
-      if (newTender.aadhar !== "null")
-        updt_url2 = urlFile2;
-      else
-        updt_url2 = hrefAADHAR;
-      if (newTender.pan !== "null")
-        updt_url3 = urlFile3;
-      else
-        updt_url3 = hrefPAN;
-      if (newTender.emdNumber !== "null" && newTender.emdNumber.toString().length > 0)
+      if (newTender.edm !== "null") updt_url1 = urlFile1;
+      else updt_url1 = hrefEMD;
+      if (newTender.aadhar !== "null") updt_url2 = urlFile2;
+      else updt_url2 = hrefAADHAR;
+      if (newTender.pan !== "null") updt_url3 = urlFile3;
+      else updt_url3 = hrefPAN;
+      if (
+        newTender.emdNumber !== "null" &&
+        newTender.emdNumber.toString().length > 0
+      )
         updt_emdnum = newTender.emdNumber;
-      else
-        updt_emdnum = existing_emdNumber;
+      else updt_emdnum = existing_emdNumber;
       if (newTender.tenderValue !== "null" && Number(newTender.tenderValue) > 0)
         updt_value = newTender.tenderValue;
-      else
-        updt_value = existing_val;
+      else updt_value = existing_val;
 
       await makePDF(updt_value, updt_emdnum, updt_url1, updt_url2, updt_url3);
 
-
       // Throw confirmation box to user
-      confirm({ description: 'Please review the downloaded Tender Application. Then click \'OK\' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).' })
-          .then(async () =>  {
-            // User clicks OK
-            setOpen4(true);
-            // ----------------------------------------
-            // EDM File edited
-            if (newTender.edm !== "null") {
-              console.log("EDM File edited");
-              await axios({
-                url: "https://murudeshwar.org/upload_edm",
-                method: "POST",
-                data: {
-                  tenderName: val.tender_name,
-                  email: email,
-                  EDM_file: formData.get("emd"),
-                },
-                headers: { "Content-Type": "multipart/form-data" },
-              }).then((res) => {
-                console.log("EDM File updated successfully", res);
-              });
-            }
+      confirm({
+        description:
+          "Please review the downloaded Tender Application. Then click 'OK' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).",
+      })
+        .then(async () => {
+          // User clicks OK
+          setOpen4(true);
+          // ----------------------------------------
+          // EDM File edited
+          if (newTender.edm !== "null") {
+            console.log("EDM File edited");
+            await axios({
+              url: "https://murudeshwar.org/upload_edm",
+              method: "POST",
+              data: {
+                tenderName: val.tender_name,
+                email: email,
+                EDM_file: formData.get("emd"),
+              },
+              headers: { "Content-Type": "multipart/form-data" },
+            }).then((res) => {
+              console.log("EDM File updated successfully", res);
+            });
+          }
 
-            // AADHAR File edited
-            if (newTender.aadhar !== "null") {
-              console.log("AADHAR File edited");
-              await axios({
-                url: "https://murudeshwar.org/upload_aadhar",
-                method: "POST",
-                data: {
-                  tenderName: val.tender_name,
-                  email: email,
-                  aadhar_file: formData.get("aadhar"),
-                },
-                headers: { "Content-Type": "multipart/form-data" },
-              }).then((res) => {
-                console.log("Aadhar File updated successfully", res);
-              });
-            }
+          // AADHAR File edited
+          if (newTender.aadhar !== "null") {
+            console.log("AADHAR File edited");
+            await axios({
+              url: "https://murudeshwar.org/upload_aadhar",
+              method: "POST",
+              data: {
+                tenderName: val.tender_name,
+                email: email,
+                aadhar_file: formData.get("aadhar"),
+              },
+              headers: { "Content-Type": "multipart/form-data" },
+            }).then((res) => {
+              console.log("Aadhar File updated successfully", res);
+            });
+          }
 
-            // PAN File edited
-            if (newTender.pan !== "null") {
-              console.log("PAN File edited");
-              await axios({
-                url: "https://murudeshwar.org/upload_pan",
-                method: "POST",
-                data: {
-                  tenderName: val.tender_name,
-                  email: email,
-                  PAN_file: formData.get("pan"),
-                },
-                headers: { "Content-Type": "multipart/form-data" },
-              }).then((res) => {
-                console.log("PAN File updated successfully", res);
-              });
-            }
+          // PAN File edited
+          if (newTender.pan !== "null") {
+            console.log("PAN File edited");
+            await axios({
+              url: "https://murudeshwar.org/upload_pan",
+              method: "POST",
+              data: {
+                tenderName: val.tender_name,
+                email: email,
+                PAN_file: formData.get("pan"),
+              },
+              headers: { "Content-Type": "multipart/form-data" },
+            }).then((res) => {
+              console.log("PAN File updated successfully", res);
+            });
+          }
 
-            // EMD No Edited
-            if (
-              newTender.emdNumber !== "null" &&
-              newTender.emdNumber.toString().length > 0
-            ) {
-              console.log("EMD No edited");
-              await axios({
-                url: "https://murudeshwar.org/update_emdNumber",
-                method: "POST",
-                withCredentials: true,
-                crossDomain: true,
-                data: {
-                  tenderName: newTender.tenderName,
-                  email: newTender.email,
-                  emdNumber: newTender.emdNumber,
-                },
-              }).then((res) => {
-                console.log("emdNumber updated successfully ", res);
-              });
-            }
+          // EMD No Edited
+          if (
+            newTender.emdNumber !== "null" &&
+            newTender.emdNumber.toString().length > 0
+          ) {
+            console.log("EMD No edited");
+            await axios({
+              url: "https://murudeshwar.org/update_emdNumber",
+              method: "POST",
+              withCredentials: true,
+              crossDomain: true,
+              data: {
+                tenderName: newTender.tenderName,
+                email: newTender.email,
+                emdNumber: newTender.emdNumber,
+              },
+            }).then((res) => {
+              console.log("emdNumber updated successfully ", res);
+            });
+          }
 
-            // TenderValue edited
-            if (
-              newTender.tenderValue !== "null" &&
-              Number(newTender.tenderValue) > 0
-            ) {
-              console.log("tenderValue edited");
-              await axios({
-                url: "https://murudeshwar.org/update_vender",
-                method: "POST",
-                withCredentials: true,
-                crossDomain: true,
-                data: {
-                  tenderName: newTender.tenderName,
-                  email: newTender.email,
-                  tenderValue: newTender.tenderValue,
-                },
-              }).then((res) => {
-                console.log("tenderValue updated successfully ", res);
-              });
-            }
+          // TenderValue edited
+          if (
+            newTender.tenderValue !== "null" &&
+            Number(newTender.tenderValue) > 0
+          ) {
+            console.log("tenderValue edited");
+            await axios({
+              url: "https://murudeshwar.org/update_vender",
+              method: "POST",
+              withCredentials: true,
+              crossDomain: true,
+              data: {
+                tenderName: newTender.tenderName,
+                email: newTender.email,
+                tenderValue: newTender.tenderValue,
+              },
+            }).then((res) => {
+              console.log("tenderValue updated successfully ", res);
+            });
+          }
 
-            setOpen2(true);
-            setTimeout(function () {
-              navigate("/vendor/uploadtender");
-            }, 1000);
-            return;
-            // ----------------------------------------
-          })
-          .catch(() => { 
-            setFirstClick(true);
-            return;
-          })
-
-      
+          setOpen2(true);
+          setTimeout(function () {
+            navigate("/vendor/uploadtender");
+          }, 1000);
+          return;
+          // ----------------------------------------
+        })
+        .catch(() => {
+          setFirstClick(true);
+          return;
+        });
     }
 
     // *****************CASE 3 : Second Tender Upload after Withdrawing*************************
@@ -478,10 +489,19 @@ const VendorTenderDetails = () => {
         console.log("CASE 3 : Second Tender Upload after Withdrawing");
 
         // make PDF
-        await makePDF(newTender.tenderValue, newTender.emdNumber, urlFile1, urlFile2, urlFile3);
+        await makePDF(
+          newTender.tenderValue,
+          newTender.emdNumber,
+          urlFile1,
+          urlFile2,
+          urlFile3
+        );
 
-        confirm({ description: 'Please review the downloaded Tender Application. Then click \'OK\' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).' })
-          .then(async () => { 
+        confirm({
+          description:
+            "Please review the downloaded Tender Application. Then click 'OK' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).",
+        })
+          .then(async () => {
             // User clicked OK
             setOpen4(true);
             // Delete existing tender
@@ -519,11 +539,11 @@ const VendorTenderDetails = () => {
                 }
               });
           })
-          .catch(() => { 
+          .catch(() => {
             // User clicked CANCEL or clickaway
             setFirstClick(true);
             return;
-          })
+          });
       }
       return;
     }
@@ -639,19 +659,19 @@ const VendorTenderDetails = () => {
   const handleFileSelect1 = (event) => {
     // console.log(event.target.files[0]);
     if (event.target.files[0].type != "application/pdf")
-      window.location.reload()
+      window.location.reload();
     setSelectedFile1(event.target.files[0]);
     setURLFile1(URL.createObjectURL(event.target.files[0]));
   };
   const handleFileSelect2 = (event) => {
     if (event.target.files[0].type != "application/pdf")
-      window.location.reload()
+      window.location.reload();
     setSelectedFile2(event.target.files[0]);
     setURLFile2(URL.createObjectURL(event.target.files[0]));
   };
   const handleFileSelect3 = (event) => {
     if (event.target.files[0].type != "application/pdf")
-      window.location.reload()
+      window.location.reload();
     setSelectedFile3(event.target.files[0]);
     setURLFile3(URL.createObjectURL(event.target.files[0]));
   };
@@ -673,26 +693,39 @@ const VendorTenderDetails = () => {
   };
   // -----------------------------
 
-
   const makePDF = async (tendValue, emdNumb, url1, url2, url3) => {
-
-    console.log("Params: " , "\n" , tendValue , "\n" , emdNumb , "\n" , url1 , "\n" , url2 , "\n" , url3);
+    console.log(
+      "Params: ",
+      "\n",
+      tendValue,
+      "\n",
+      emdNumb,
+      "\n",
+      url1,
+      "\n",
+      url2,
+      "\n",
+      url3
+    );
 
     // PDF Creation
     const pdfDoc = await PDFDocument.create();
     const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const helveticaBoldFont = await pdfDoc.embedFont(
+      StandardFonts.HelveticaBold
+    );
     const page = pdfDoc.addPage();
 
     const { width, height } = page.getSize();
     const fontSize = 15;
 
     // Add PDF Heading contents
-    page.drawText("MHATOBAR SHRI MURDESHWAR TEMPLE", {
-      x: 30,
+    // page.drawText("MHATOBAR SHRI MURDESHWAR TEMPLE", {
+    page.drawText("Sundarrameshwar Trust", {
+      x: 160,
       y: height - 100,
-      size: 26,
+      size: 24,
       font: helveticaBoldFont,
       color: rgb(0, 0, 0),
     });
@@ -713,41 +746,58 @@ const VendorTenderDetails = () => {
 
     // ------------------------
 
-    page.drawText("Tender Name: " + (window.sessionStorage.getItem("tender_name")).toString(), {
-      x: 100,
-      y: height - 200 - 4 * fontSize,
-      size: fontSize,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
-    page.drawText("Vendor Name: " + (window.sessionStorage.getItem("userVendorName")).toString(), {
-      x: 100,
-      y: height - 240 - 4 * fontSize,
-      size: fontSize,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
-    page.drawText("Organisation Name: " + (window.sessionStorage.getItem("userOrg")).toString(), {
-      x: 100,
-      y: height - 280 - 4 * fontSize,
-      size: fontSize,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
-    page.drawText("Phone: " + (window.sessionStorage.getItem("userPhone")).toString(), {
-      x: 100,
-      y: height - 320 - 4 * fontSize,
-      size: fontSize,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
-    page.drawText("EMail: " + (window.sessionStorage.getItem("userEmail")).toString(), {
-      x: 100,
-      y: height - 360 - 4 * fontSize,
-      size: fontSize,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
+    page.drawText(
+      "Tender Name: " + window.sessionStorage.getItem("tender_name").toString(),
+      {
+        x: 100,
+        y: height - 200 - 4 * fontSize,
+        size: fontSize,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      }
+    );
+    page.drawText(
+      "Vendor Name: " +
+        window.sessionStorage.getItem("userVendorName").toString(),
+      {
+        x: 100,
+        y: height - 240 - 4 * fontSize,
+        size: fontSize,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      }
+    );
+    page.drawText(
+      "Organisation Name: " +
+        window.sessionStorage.getItem("userOrg").toString(),
+      {
+        x: 100,
+        y: height - 280 - 4 * fontSize,
+        size: fontSize,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      }
+    );
+    page.drawText(
+      "Phone: " + window.sessionStorage.getItem("userPhone").toString(),
+      {
+        x: 100,
+        y: height - 320 - 4 * fontSize,
+        size: fontSize,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      }
+    );
+    page.drawText(
+      "EMail: " + window.sessionStorage.getItem("userEmail").toString(),
+      {
+        x: 100,
+        y: height - 360 - 4 * fontSize,
+        size: fontSize,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      }
+    );
     page.drawText("Tender Value: " + tendValue.toString(), {
       x: 100,
       y: height - 400 - 4 * fontSize,
@@ -781,7 +831,7 @@ const VendorTenderDetails = () => {
       const donorPdfDoc = await PDFDocument.load(donorPdfBytes, {
         ignoreEncryption: true,
       });
-      
+
       const docLength = donorPdfDoc.getPageCount();
       for (var k = 0; k < docLength; k++) {
         const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [k]);
@@ -813,7 +863,6 @@ const VendorTenderDetails = () => {
       var base64String = reader.result;
       // console.log("Base64 String - ", base64String);
 
-
       // ------------------------- EmailJS -----------------------------------
 
       // var templateParams = {
@@ -821,10 +870,15 @@ const VendorTenderDetails = () => {
       // };
 
       await window.emailjs
-        .send('service_d9uzoqn', 'template_cmix3p1', {
-          vendor_email: email.toString(),
-          content: base64String
-        }, "jVJiCS_0zN5eGjcJC")
+        .send(
+          "service_d9uzoqn",
+          "template_cmix3p1",
+          {
+            vendor_email: email.toString(),
+            content: base64String,
+          },
+          "jVJiCS_0zN5eGjcJC"
+        )
         .then(
           function (response) {
             console.log("SUCCESS!", response.status, response.text);
@@ -835,7 +889,6 @@ const VendorTenderDetails = () => {
         );
 
       // ----------------------------------------------------------------------
-
 
       // Send Email------------- smtpJS
       // console.log("Sending EMAIL!!!");
@@ -856,7 +909,6 @@ const VendorTenderDetails = () => {
       // -----------------------------------------------
     };
 
-
     // To make this work on Firefox we need to wait
     // a little while before removing it.
     setTimeout(() => {
@@ -865,8 +917,6 @@ const VendorTenderDetails = () => {
     }, 0);
     // ---------------------------------------------------
   };
-
-
 
   const logout = () => {
     axios({

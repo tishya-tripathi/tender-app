@@ -124,19 +124,34 @@ const AdminViewTender = () => {
 
         {/* Body */}
 
-        <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="xl" className="viewTender" sx={{ mt: 7, mb: 7 }}>
           <Grid container spacing={3}>
-            <Grid item xs={8} sx={{}}>
-              <FormControl sx={{ width: 200 }}>
-                <InputLabel id="tender-name-label">Select Tender</InputLabel>
+            <Grid item xs={8}>
+              <FormControl sx={{ width: 350 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Programme *
+                </InputLabel>
                 <Select
-                  labelId="select-tender-name-label"
+                  variant="filled"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   name="selectTenderName"
                   onChange={displayTender}
                 >
                   {tenderDropdown}
                 </Select>
               </FormControl>
+
+              {/* <FormControl sx={{ width: 300 }}>
+                <InputLabel id="tender-name-label">Select Tender</InputLabel>
+                <Select
+                  labelId="tender-name-label"
+                  name="selectTenderName"
+                  onChange={displayTender}
+                >
+                  {tenderDropdown}
+                </Select>
+              </FormControl> */}
             </Grid>
           </Grid>
         </Container>

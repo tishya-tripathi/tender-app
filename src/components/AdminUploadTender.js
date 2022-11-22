@@ -105,12 +105,10 @@ const AdminUploadTender = () => {
       if (newTender.file_upload === "null") {
         window.alert("File Upload is mandatory!");
         return;
-      }
-      else if (newTender.minTenderAmount == "") {
+      } else if (newTender.minTenderAmount == "") {
         window.alert("Minimum Tender Amount cannot be 0");
         return;
-      }
-      else if (newTender.startDate === newTender.endDate) {
+      } else if (newTender.startDate === newTender.endDate) {
         window.alert("Start Date and End Date cannot be same!");
         return;
       } else {
@@ -134,7 +132,7 @@ const AdminUploadTender = () => {
   const handleFileSelect = (event) => {
     // console.log(event.target.files[0]);
     if (event.target.files[0].type != "application/pdf")
-      window.location.reload()
+      window.location.reload();
     setSelectedFile(event.target.files[0]);
   };
 

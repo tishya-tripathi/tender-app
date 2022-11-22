@@ -44,13 +44,14 @@ const AdminGridComponent = () => {
       // console.log(res);
       const data = [];
       console.log("New res data: ", res);
+      let cnt = 1;
       for (var i = 0; i < res.data.length; i++) {
         if (
           res.data[i].tenderName === tenderName &&
           res.data[i].stud.length !== 0
         ) {
           var obj = {
-            id: i + 2,
+            id: cnt++,
             vendorName: res.data[i].stud[0].profile.name,
             orgName: res.data[i].stud[0].profile.organization,
             phone: res.data[i].stud[0].profile.phoneno,
@@ -97,10 +98,10 @@ const AdminGridComponent = () => {
     const fontSize = 15;
 
     // Add PDF Heading contents
-    page.drawText("MHATOBAR SHRI MURDESHWAR TEMPLE", {
-      x: 30,
+    page.drawText("Sundarrameshwar Trust", {
+      x: 160,
       y: height - 100,
-      size: 26,
+      size: 24,
       font: helveticaBoldFont,
       color: rgb(0, 0, 0),
     });
@@ -235,12 +236,17 @@ const AdminGridComponent = () => {
     // ---------------------------------------------------
   };
 
+  let cnt = 0;
+
   const columns = [
     {
       field: "id",
       headerName: "No.",
       flex: 1,
       maxWidth: 80,
+      renderCell: (index) => index.api.getRowIndex(index.row.id) + 1,
+      // filterable: false,
+      sortable: false,
     },
     {
       // --------------------------------- MERGED PDF ----------------------------------------------------
