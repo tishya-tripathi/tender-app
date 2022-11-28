@@ -67,7 +67,7 @@ const VendorSignup = () => {
     if (window.userVerified === "Yes" && emailVerified) {
       if (credentials.password === data.get("renterpwd")) {
         axios({
-          url: "http://localhost:6969/register",
+          url: "https://murudeshwar.org/register",
           method: "POST",
           withCredentials: true,
           crossDomain: true,

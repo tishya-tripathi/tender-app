@@ -48,7 +48,7 @@ const ResetPassword = () => {
     console.log("Sending GET request: ", credentials);
 
     axios({
-      url: "http://localhost:6969/reset_password",
+      url: "https://murudeshwar.org/reset_password",
       method: "GET",
       withCredentials: true,
       crossDomain: true,

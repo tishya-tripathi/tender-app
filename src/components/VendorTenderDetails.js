@@ -38,7 +38,7 @@ const VendorTenderDetails = () => {
 
   React.useEffect(() => {
     axios({
-      url: "http://localhost:6969/status",
+      url: "https://murudeshwar.org/status",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -139,7 +139,7 @@ const VendorTenderDetails = () => {
   React.useEffect(() => {
     // 1. Check if Vendor has an existing tender
     axios({
-      url: "http://localhost:6969/all_data",
+      url: "https://murudeshwar.org/all_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -162,14 +162,14 @@ const VendorTenderDetails = () => {
 
           // Set download links of EMD, PAN, AADHAR to state variables
           sethrefEMD(
-            "http://localhost:6969/" + res.data[i].profile.edm.path.toString()
+            "https://murudeshwar.org/" + res.data[i].profile.edm.path.toString()
           );
           sethrefAADHAR(
-            "http://localhost:6969/" +
+            "https://murudeshwar.org/" +
               res.data[i].profile.aadhar.path.toString()
           );
           sethrefPAN(
-            "http://localhost:6969/" + res.data[i].profile.pan.path.toString()
+            "https://murudeshwar.org/" + res.data[i].profile.pan.path.toString()
           );
 
           // Set isWithdrawn
@@ -195,7 +195,7 @@ const VendorTenderDetails = () => {
 
       // set Withdrawn field to TRUE
       await axios({
-        url: "http://localhost:6969/update_withdraw",
+        url: "https://murudeshwar.org/update_withdraw",
         method: "POST",
         withCredentials: true,
         crossDomain: true,
@@ -323,7 +323,7 @@ const VendorTenderDetails = () => {
             try {
               const response = await axios({
                 method: "post",
-                url: "http://localhost:6969/upload_file",
+                url: "https://murudeshwar.org/upload_file",
                 data: newTender,
                 headers: { "Content-Type": "multipart/form-data" },
               });
@@ -401,7 +401,7 @@ const VendorTenderDetails = () => {
           if (newTender.edm !== "null") {
             console.log("EDM File edited");
             await axios({
-              url: "http://localhost:6969/upload_edm",
+              url: "https://murudeshwar.org/upload_edm",
               method: "POST",
               data: {
                 tenderName: val.tender_name,
@@ -429,7 +429,7 @@ const VendorTenderDetails = () => {
           if (newTender.aadhar !== "null") {
             console.log("AADHAR File edited");
             await axios({
-              url: "http://localhost:6969/upload_aadhar",
+              url: "https://murudeshwar.org/upload_aadhar",
               method: "POST",
               data: {
                 tenderName: val.tender_name,
@@ -446,7 +446,7 @@ const VendorTenderDetails = () => {
           if (newTender.pan !== "null") {
             console.log("PAN File edited");
             await axios({
-              url: "http://localhost:6969/upload_pan",
+              url: "https://murudeshwar.org/upload_pan",
               method: "POST",
               data: {
                 tenderName: val.tender_name,
@@ -466,7 +466,7 @@ const VendorTenderDetails = () => {
           ) {
             console.log("EMD No edited");
             await axios({
-              url: "http://localhost:6969/update_emdNumber",
+              url: "https://murudeshwar.org/update_emdNumber",
               method: "POST",
               withCredentials: true,
               crossDomain: true,
@@ -487,7 +487,7 @@ const VendorTenderDetails = () => {
           ) {
             console.log("tenderValue edited");
             await axios({
-              url: "http://localhost:6969/update_vender",
+              url: "https://murudeshwar.org/update_vender",
               method: "POST",
               withCredentials: true,
               crossDomain: true,
@@ -555,7 +555,7 @@ const VendorTenderDetails = () => {
             setOpen4(true);
             // Delete existing tender
             await axios
-              .delete("http://localhost:6969/delete_tender_file", {
+              .delete("https://murudeshwar.org/delete_tender_file", {
                 data: {
                   tenderName: newTender.tenderName,
                   email: newTender.email,
@@ -573,7 +573,7 @@ const VendorTenderDetails = () => {
                 try {
                   const response = await axios({
                     method: "post",
-                    url: "http://localhost:6969/upload_file",
+                    url: "https://murudeshwar.org/upload_file",
                     data: newTender,
                     headers: { "Content-Type": "multipart/form-data" },
                   });
@@ -982,15 +982,14 @@ const VendorTenderDetails = () => {
 
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://murudeshwar.org/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
       //   console.log(res);
-      navigate("/")
+      navigate("/");
     });
-    
   };
 
   return (

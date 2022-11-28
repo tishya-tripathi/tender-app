@@ -58,7 +58,7 @@ const VendorCardComponent = ({ data }) => {
   const [email, setEmail] = React.useState(null);
   try {
     axios({
-      url: "http://localhost:6969/status",
+      url: "https://murudeshwar.org/status",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -117,7 +117,7 @@ const VendorCardComponent = ({ data }) => {
         try {
           const response = await axios({
             method: "post",
-            url: "http://localhost:6969/upload_tender_file",
+            url: "https://murudeshwar.org/upload_tender_file",
             data: newTender,
             headers: { "Content-Type": "multipart/form-data" },
           });

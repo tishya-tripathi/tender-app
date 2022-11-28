@@ -29,7 +29,7 @@ const AdminUploadTender = () => {
   const checkStatus = async () => {
     try {
       const resp = await axios({
-        url: "http://localhost:6969/status",
+        url: "https://murudeshwar.org/status",
         method: "GET",
         withCredentials: true,
         crossDomain: true,
@@ -66,7 +66,7 @@ const AdminUploadTender = () => {
   const [check, setCheck] = React.useState(0);
 
   axios({
-    url: "http://localhost:6969/all_admin_data",
+    url: "https://murudeshwar.org/all_admin_data",
     method: "GET",
     withCredentials: true,
     crossDomain: true,
@@ -118,7 +118,7 @@ const AdminUploadTender = () => {
         try {
           const response = await axios({
             method: "post",
-            url: "http://localhost:6969/upload_vender_admin",
+            url: "https://murudeshwar.org/upload_vender_admin",
             data: newTender,
             headers: { "Content-Type": "multipart/form-data" },
           }).then((res) => {
@@ -160,7 +160,7 @@ const AdminUploadTender = () => {
 
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://murudeshwar.org/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,

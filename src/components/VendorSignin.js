@@ -32,7 +32,7 @@ const VendorSignin = () => {
   const navigate = useNavigate();
 
   axios({
-    url: "http://localhost:6969/logout",
+    url: "https://murudeshwar.org/logout",
     method: "GET",
     withCredentials: true,
     crossDomain: true,
@@ -51,7 +51,7 @@ const VendorSignin = () => {
     };
 
     axios({
-      url: "http://localhost:6969/vendors_signin",
+      url: "https://murudeshwar.org/vendors_signin",
       method: "POST",
       withCredentials: true,
       crossDomain: true,

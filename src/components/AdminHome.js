@@ -16,7 +16,7 @@ const AdminHome = () => {
 
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://murudeshwar.org/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,

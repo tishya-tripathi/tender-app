@@ -25,7 +25,7 @@ const VendorUploadTender = () => {
 
   React.useEffect(() => {
     axios({
-      url: "http://localhost:6969/all_admin_data",
+      url: "https://murudeshwar.org/all_admin_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -38,7 +38,8 @@ const VendorUploadTender = () => {
           startDate: res.data[i].profile.startDate,
           endDate: res.data[i].profile.endDate,
           filename:
-            "http://localhost:6969/" + res.data[i].profile.file.path.toString(),
+            "https://murudeshwar.org/" +
+            res.data[i].profile.file.path.toString(),
           minTenderAmount: res.data[i].profile.minTenderAmount,
         };
 
@@ -56,7 +57,7 @@ const VendorUploadTender = () => {
 
   const logout = () => {
     axios({
-      url: "http://localhost:6969/logout",
+      url: "https://murudeshwar.org/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
