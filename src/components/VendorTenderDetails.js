@@ -437,7 +437,18 @@ const VendorTenderDetails = () => {
                 aadhar_file: formData.get("aadhar"),
               },
               headers: { "Content-Type": "multipart/form-data" },
-            }).then((res) => {
+            }).then(async (res) => {
+              //Changed
+              setTimeout(
+                await makePDF(
+                  updt_value,
+                  updt_emdnum,
+                  updt_url1,
+                  updt_url2,
+                  updt_url3
+                ),
+                3000
+              );
               console.log("Aadhar File updated successfully", res);
             });
           }
@@ -454,7 +465,18 @@ const VendorTenderDetails = () => {
                 PAN_file: formData.get("pan"),
               },
               headers: { "Content-Type": "multipart/form-data" },
-            }).then((res) => {
+            }).then(async (res) => {
+              //Changed
+              setTimeout(
+                await makePDF(
+                  updt_value,
+                  updt_emdnum,
+                  updt_url1,
+                  updt_url2,
+                  updt_url3
+                ),
+                3000
+              );
               console.log("PAN File updated successfully", res);
             });
           }
@@ -475,7 +497,18 @@ const VendorTenderDetails = () => {
                 email: newTender.email,
                 emdNumber: newTender.emdNumber,
               },
-            }).then((res) => {
+            }).then(async (res) => {
+              //Changed
+              setTimeout(
+                await makePDF(
+                  updt_value,
+                  updt_emdnum,
+                  updt_url1,
+                  updt_url2,
+                  updt_url3
+                ),
+                3000
+              );
               console.log("emdNumber updated successfully ", res);
             });
           }
@@ -496,7 +529,18 @@ const VendorTenderDetails = () => {
                 email: newTender.email,
                 tenderValue: newTender.tenderValue,
               },
-            }).then((res) => {
+            }).then(async (res) => {
+              //Changed
+              setTimeout(
+                await makePDF(
+                  updt_value,
+                  updt_emdnum,
+                  updt_url1,
+                  updt_url2,
+                  updt_url3
+                ),
+                3000
+              );
               console.log("tenderValue updated successfully ", res);
             });
           }
