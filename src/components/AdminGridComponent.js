@@ -43,7 +43,7 @@ const AdminGridComponent = () => {
     ];
 
     axios({
-      url: "https://murudeshwar.org/logout",
+      url: "http://localhost:6969/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -57,7 +57,7 @@ const AdminGridComponent = () => {
 
   React.useEffect(() => {
     axios({
-      url: "https://murudeshwar.org/all_data",
+      url: "http://localhost:6969/all_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -78,13 +78,13 @@ const AdminGridComponent = () => {
             phone: res.data[i].stud[0].profile.phoneno,
             tenderValue: res.data[i].tenderValue,
             urlEmd:
-              "https://murudeshwar.org/" +
+              "http://localhost:6969/" +
               res.data[i].profile.edm.path.toString(),
             urlAadhar:
-              "https://murudeshwar.org/" +
+              "http://localhost:6969/" +
               res.data[i].profile.aadhar.path.toString(),
             urlPan:
-              "https://murudeshwar.org/" +
+              "http://localhost:6969/" +
               res.data[i].profile.pan.path.toString(),
             withdraw: res.data[i].withdraw,
             emdNum: res.data[i].emdNumber,

@@ -55,7 +55,7 @@ const AdminSignin = () => {
     const signIn = async () => {
       try {
         const resp = await axios
-          .post("https://murudeshwar.org/signin", credential, {
+          .post("http://localhost:6969/signin", credential, {
             headers: {
               "Content-Type": "application/json",
             },

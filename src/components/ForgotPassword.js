@@ -53,7 +53,7 @@ const ForgotPassword = () => {
       if (credentials.password === data.get("renterpwd")) {
         console.log("Sending API request: ", credentials);
         axios({
-          url: "https://murudeshwar.org/forgot_password",
+          url: "http://localhost:6969/forgot_password",
           method: "POST",
           withCredentials: true,
           crossDomain: true,

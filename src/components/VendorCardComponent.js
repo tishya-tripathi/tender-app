@@ -58,7 +58,7 @@ const VendorCardComponent = ({ data }) => {
   const [email, setEmail] = React.useState(null);
   try {
     axios({
-      url: "https://murudeshwar.org/status",
+      url: "http://localhost:6969/status",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -68,7 +68,7 @@ const VendorCardComponent = ({ data }) => {
         setCheck(0);
         setEmail(window.sessionStorage.getItem("userEmail"));
         console.log("Not Logged In", email);
-        navigate("/");
+        // navigate("/");
       } else {
         setCheck(1);
         setEmail(window.sessionStorage.getItem("userEmail"));
@@ -117,7 +117,7 @@ const VendorCardComponent = ({ data }) => {
         try {
           const response = await axios({
             method: "post",
-            url: "https://murudeshwar.org/upload_tender_file",
+            url: "http://localhost:6969/upload_tender_file",
             data: newTender,
             headers: { "Content-Type": "multipart/form-data" },
           });

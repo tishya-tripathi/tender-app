@@ -20,7 +20,7 @@ const AdminViewTender = () => {
   const [tenderDropdown, setTenderDropDown] = React.useState([]);
   const logout = () => {
     axios({
-      url: "https://murudeshwar.org/logout",
+      url: "http://localhost:6969/logout",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
@@ -38,7 +38,7 @@ const AdminViewTender = () => {
 
   React.useEffect(() => {
     axios({
-      url: "https://murudeshwar.org/all_data",
+      url: "http://localhost:6969/all_data",
       method: "GET",
       withCredentials: true,
       crossDomain: true,

@@ -34,7 +34,7 @@ const AdminCardComponent = ({ data }) => {
       )
     ) {
       axios
-        .delete("https://murudeshwar.org/delete_file", {
+        .delete("http://localhost:6969/delete_file", {
           data: {
             tenderName: tenderName,
           },
