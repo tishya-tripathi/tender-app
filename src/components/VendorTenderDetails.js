@@ -36,6 +36,26 @@ const VendorTenderDetails = () => {
   const navigate = useNavigate();
   const confirm = useConfirm();
 
+  React.useEffect(() => {
+    axios({
+      url: "https://murudeshwar.org/status",
+      method: "GET",
+      withCredentials: true,
+      crossDomain: true,
+    }).then((res) => {
+      console.log(res);
+      if (res.data.isLogged === false) {
+        setEmail(window.sessionStorage.getItem("userEmail"));
+        console.log("Not Logged In", email);
+        navigate("/");
+      } else {
+        setEmail(window.sessionStorage.getItem("userEmail"));
+        console.log("Logged In", email);
+        // console.log(res.data.profile.email);
+      }
+    });
+  }, []);
+
   //  To Words package config
   const toWords = new ToWords({
     localeCode: "en-IN",
@@ -255,6 +275,9 @@ const VendorTenderDetails = () => {
     };
     console.log("New Tender : ", newTender);
 
+    //Push data to database so that it is store in the log
+    // const sendLoe.preventDefault();
+
     // *****************CASE 1 : First Tender Upload*************************
 
     if (existingTender === "" && !isWithdrawn) {
@@ -280,14 +303,14 @@ const VendorTenderDetails = () => {
         console.log("CASE 1 : First Tender Upload ");
 
         // Add Acknowledge Button
-        console.log("Making PDF");
-        await makePDF(
-          newTender.tenderValue,
-          newTender.emdNumber,
-          urlFile1,
-          urlFile2,
-          urlFile3
-        );
+        // console.log("Making PDF");
+        // await makePDF(
+        //   newTender.tenderValue,
+        //   newTender.emdNumber,
+        //   urlFile1,
+        //   urlFile2,
+        //   urlFile3
+        // );
 
         confirm({
           description:
@@ -304,12 +327,27 @@ const VendorTenderDetails = () => {
                 data: newTender,
                 headers: { "Content-Type": "multipart/form-data" },
               });
+              console.log("Making PDF");
+
+              //Changed
+              setTimeout(
+                await makePDF(
+                  newTender.tenderValue,
+                  newTender.emdNumber,
+                  urlFile1,
+                  urlFile2,
+                  urlFile3
+                ),
+                3000
+              );
+
               console.log("Success! Tender Uploaded. Case 1.\n");
               setOpen(true);
 
               setTimeout(function () {
                 navigate("/vendor/uploadtender");
               }, 1000);
+
               return;
             } catch (error) {
               console.log("Error. Tender not Uploaded! Case 1.\n", error);
@@ -348,7 +386,7 @@ const VendorTenderDetails = () => {
         updt_value = newTender.tenderValue;
       else updt_value = existing_val;
 
-      await makePDF(updt_value, updt_emdnum, updt_url1, updt_url2, updt_url3);
+      // await makePDF(updt_value, updt_emdnum, updt_url1, updt_url2, updt_url3);
 
       // Throw confirmation box to user
       confirm({
@@ -371,7 +409,18 @@ const VendorTenderDetails = () => {
                 EDM_file: formData.get("emd"),
               },
               headers: { "Content-Type": "multipart/form-data" },
-            }).then((res) => {
+            }).then(async (res) => {
+              //Changed
+              setTimeout(
+                await makePDF(
+                  updt_value,
+                  updt_emdnum,
+                  updt_url1,
+                  updt_url2,
+                  updt_url3
+                ),
+                3000
+              );
               console.log("EDM File updated successfully", res);
             });
           }
@@ -489,13 +538,13 @@ const VendorTenderDetails = () => {
         console.log("CASE 3 : Second Tender Upload after Withdrawing");
 
         // make PDF
-        await makePDF(
-          newTender.tenderValue,
-          newTender.emdNumber,
-          urlFile1,
-          urlFile2,
-          urlFile3
-        );
+        // await makePDF(
+        //   newTender.tenderValue,
+        //   newTender.emdNumber,
+        //   urlFile1,
+        //   urlFile2,
+        //   urlFile3
+        // );
 
         confirm({
           description:
@@ -513,6 +562,8 @@ const VendorTenderDetails = () => {
                 },
               })
               .then(async (res) => {
+                //Changed
+
                 console.log("Deleted existing tender");
 
                 // upload new tender & set "withdrawn" to false
@@ -526,6 +577,17 @@ const VendorTenderDetails = () => {
                     data: newTender,
                     headers: { "Content-Type": "multipart/form-data" },
                   });
+
+                  setTimeout(async () => {
+                    await makePDF(
+                      newTender.tenderValue,
+                      newTender.emdNumber,
+                      urlFile1,
+                      urlFile2,
+                      urlFile3
+                    );
+                  }, 3000);
+
                   console.log("Success! Tender Uploaded. Case 3.\n");
                   setOpen(true);
                   setTimeout(function () {
@@ -729,7 +791,7 @@ const VendorTenderDetails = () => {
       font: helveticaBoldFont,
       color: rgb(0, 0, 0),
     });
-    page.drawText("MURDESHWAR – 581350 (N.K.) Karnataka", {
+    page.drawText("MURDESHWAR - 581350 (N.K.) Karnataka", {
       x: 150,
       y: height - 125,
       size: 15,
@@ -965,6 +1027,9 @@ const VendorTenderDetails = () => {
         </Box>
 
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Alert sx={{marginBottom:"30px"}} severity="warning">
+            Please upload the documents with a size below 150Kb...
+          </Alert>
           {hasApplied()}
           <Grid item xs={12}>
             <Paper
@@ -1357,7 +1422,6 @@ const VendorTenderDetails = () => {
                     name="tender_val_words"
                     value={val.tender_val_words}
                     multiline="true"
-                    // onChange={handleChange}
                     variant="outlined"
                     InputProps={{
                       readOnly: true,

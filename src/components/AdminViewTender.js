@@ -121,7 +121,6 @@ const AdminViewTender = () => {
             </Toolbar>
           </AppBar>
         </Box>
-
         {/* Body */}
 
         <Container maxWidth="xl" className="viewTender" sx={{ mt: 7, mb: 7 }}>

@@ -68,6 +68,7 @@ const VendorCardComponent = ({ data }) => {
         setCheck(0);
         setEmail(window.sessionStorage.getItem("userEmail"));
         console.log("Not Logged In", email);
+        navigate("/");
       } else {
         setCheck(1);
         setEmail(window.sessionStorage.getItem("userEmail"));

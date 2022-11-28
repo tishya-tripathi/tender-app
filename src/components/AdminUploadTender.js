@@ -26,6 +26,26 @@ import "./Styles.css";
 axios.defaults.withCredentials = true;
 
 const AdminUploadTender = () => {
+  const checkStatus = async () => {
+    try {
+      const resp = await axios({
+        url: "https://murudeshwar.org/status",
+        method: "GET",
+        withCredentials: true,
+        crossDomain: true,
+      }).then((res) => {
+        if (res.isLogged === false) navigate("/");
+        console.log(res);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  React.useEffect(() => {
+    checkStatus();
+  }, []);
+
   const theme = useTheme();
   const formatDate = (param) => {
     var x = new Date(param);
@@ -45,43 +65,25 @@ const AdminUploadTender = () => {
   const [data, setData] = React.useState([]); // Delete before deploy {tenderName: "Test Tender XYZ", startDate: "Oct 07 2022 09:37", endDate: "Oct 20 2022 11:30", minTenderAmount: 55000}
   const [check, setCheck] = React.useState(0);
 
-  React.useEffect(() => {
-    axios({
-      url: "https://murudeshwar.org/all_admin_data",
-      method: "GET",
-      withCredentials: true,
-      crossDomain: true,
-    }).then((res) => {
-      console.log(res);
-      let temp_data = [];
-      for (let i = 0; i < res.data.length; i++) {
-        const obj = {
-          tenderName: res.data[i].tenderName,
-          startDate: res.data[i].profile.startDate,
-          endDate: res.data[i].profile.endDate,
-          minTenderAmount: res.data[i].profile.minTenderAmount,
-        };
-        temp_data.push(obj);
-      }
-      setData(temp_data);
-    });
-
-    const checkStatus = async () => {
-      try {
-        const resp = await axios({
-          url: "https://murudeshwar.org/status",
-          method: "GET",
-          withCredentials: true,
-          crossDomain: true,
-        }).then((res) => {
-          console.log(res);
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    checkStatus();
-  }, []);
+  axios({
+    url: "https://murudeshwar.org/all_admin_data",
+    method: "GET",
+    withCredentials: true,
+    crossDomain: true,
+  }).then((res) => {
+    console.log(res);
+    let temp_data = [];
+    for (let i = 0; i < res.data.length; i++) {
+      const obj = {
+        tenderName: res.data[i].tenderName,
+        startDate: res.data[i].profile.startDate,
+        endDate: res.data[i].profile.endDate,
+        minTenderAmount: res.data[i].profile.minTenderAmount,
+      };
+      temp_data.push(obj);
+    }
+    setData(temp_data);
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
