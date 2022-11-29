@@ -347,7 +347,6 @@ const VendorTenderDetails = () => {
               setTimeout(function () {
                 navigate("/vendor/uploadtender");
               }, 1000);
-
               return;
             } catch (error) {
               console.log("Error. Tender not Uploaded! Case 1.\n", error);
