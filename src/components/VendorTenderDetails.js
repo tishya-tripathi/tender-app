@@ -314,7 +314,7 @@ const VendorTenderDetails = () => {
 
         confirm({
           description:
-            "Please review the downloaded Tender Application. Then click 'OK' to submit.\nThe Application will be sent to your EMail address as well (Check Inbox & Spam folder).",
+            "Click 'OK' to submit Tender.\nThe tender application will be downloaded and sent to your E-Mail as well (Check Inbox & Spam folder).",
         })
           .then(async () => {
             // User clicked OK
@@ -762,21 +762,27 @@ const VendorTenderDetails = () => {
   };
 
   const handleFileSelect1 = (event) => {
-    // console.log(event.target.files[0]);
-    if (event.target.files[0].type != "application/pdf")
+    console.log(event.target.files[0]);
+    if (event.target.files[0].type != "application/pdf" || event.target.files[0].size > 165000) {
+      window.alert("Please upload PDF file below 150KB.");
       window.location.reload();
+    }
     setSelectedFile1(event.target.files[0]);
     setURLFile1(URL.createObjectURL(event.target.files[0]));
   };
   const handleFileSelect2 = (event) => {
-    if (event.target.files[0].type != "application/pdf")
+    if (event.target.files[0].type != "application/pdf" || event.target.files[0].size > 165000) {
+      window.alert("Please upload PDF file below 150KB.");
       window.location.reload();
+    }
     setSelectedFile2(event.target.files[0]);
     setURLFile2(URL.createObjectURL(event.target.files[0]));
   };
   const handleFileSelect3 = (event) => {
-    if (event.target.files[0].type != "application/pdf")
+    if (event.target.files[0].type != "application/pdf" || event.target.files[0].size > 165000) {
+      window.alert("Please upload PDF file below 150KB.");
       window.location.reload();
+    }
     setSelectedFile3(event.target.files[0]);
     setURLFile3(URL.createObjectURL(event.target.files[0]));
   };
@@ -1071,7 +1077,7 @@ const VendorTenderDetails = () => {
 
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Alert sx={{ marginBottom: "30px" }} severity="warning">
-            Please upload the documents with a size below 150Kb...
+            Please upload the documents with a size below 150kB.
           </Alert>
           {hasApplied()}
           <Grid item xs={12}>
