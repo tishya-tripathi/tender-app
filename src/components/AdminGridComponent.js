@@ -198,7 +198,7 @@ const AdminGridComponent = () => {
       color: rgb(0, 0, 0),
     });
     page.drawText(
-      "Applied on: " + Date(p.urlAadhar.slice(46, 59)).toString().slice(4, 15),
+      "Applied on: " + new Date( Number( p.urlAadhar.slice(46, 59) ) ).toString().slice(4, 15),
       {
         x: 100,
         y: height - 480 - 4 * fontSize,
